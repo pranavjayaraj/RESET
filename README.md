@@ -1,6 +1,6 @@
 # RESET APP
 
-A Hello-World Android app
+An App for Mental Wellness
 
 ## Structure
 
