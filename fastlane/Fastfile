@@ -1,0 +1,22 @@
+default_platform(:android)
+
+APP_ID = "com.reset.app"
+LAUNCH_ACTIVITY = "com.reset.app/.MainActivity"
+
+platform :android do
+  desc "Assemble the debug APK"
+  lane :build do
+    gradle(task: "assembleDebug")
+    UI.success("Debug APK built at #{lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]}")
+  end
+
+  desc "Build, install on a running device/emulator, and launch the app"
+  lane :dev do
+    # Build + install the debug variant onto the connected device/emulator.
+    gradle(task: "installDebug")
+
+    # Launch the main activity.
+    adb(command: "shell am start -n #{LAUNCH_ACTIVITY}")
+    UI.success("Launched #{APP_ID} on the connected device.")
+  end
+end
