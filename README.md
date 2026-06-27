@@ -1,9 +1,6 @@
 # RESET APP
 
-A Hello-World Android app scaffolded from the Vibely **New-Project Blueprint**
-(`docs/architecture/08-new-project-blueprint.md`). It mirrors the Vibely architecture in
-shape — convention plugins, version catalog, Hilt, Compose, multi-module — without the
-legacy ShareChat carry-over (no `:base-sharechat`, no `:repository:*`, no React Native).
+A Hello-World Android app
 
 ## Structure
 
@@ -39,7 +36,6 @@ adb shell am start -n com.reset.app/.MainActivity
 
 ## What was intentionally left out (vs. the blueprint)
 
-Per Phase 11 of the blueprint, the following are deferred until the project actually needs
+The following are deferred until the project actually needs
 them: macrobenchmark + baseline profiles, R8 full mode, the AAR↔source toggle, Showkase,
-CI workflows, and the full `feature:* + domain:* + data:* + model:*` vertical. Add them by
-following the corresponding phase in `08-new-project-blueprint.md`.
+CI workflows, and the full `feature:* + domain:* + data:* + model:*` vertical. 
