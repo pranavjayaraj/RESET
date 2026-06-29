@@ -16,7 +16,7 @@ platform :android do
     gradle(task: "installDebug")
 
     # Launch the main activity.
-    adb(command: "shell am start -n #{LAUNCH_ACTIVITY}")
+    sh("adb shell am start -n #{LAUNCH_ACTIVITY}")
     UI.success("Launched #{APP_ID} on the connected device.")
   end
 end

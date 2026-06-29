@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Home -->
+    <string name="afk_settings">Settings</string>
+    <string name="afk_reset">Reset</string>
+    <string name="afk_close_your_eyes">close your eyes</string>
+    <string name="afk_bubble_sub">%1$d min · sit</string>
+    <plurals name="afk_reset_content_description">
+        <item quantity="one">Reset. Close your eyes and sit for %1$d minute.</item>
+        <item quantity="other">Reset. Close your eyes and sit for %1$d minutes.</item>
+    </plurals>
+    <string name="afk_minutes_unit">min</string>
+
+    <!-- Words that orbit the reset bubble, then spiral away when a sit begins. -->
+    <string-array name="afk_reset_words">
+        <item>stress</item>
+        <item>anxiety</item>
+        <item>fatigue</item>
+        <item>depression</item>
+    </string-array>
+    <plurals name="afk_select_duration_content_description">
+        <item quantity="one">Sit for %1$d minute</item>
+        <item quantity="other">Sit for %1$d minutes</item>
+    </plurals>
+
+    <!-- Footer / stats -->
+    <string name="afk_footer_first_sit">your first sit</string>
+    <string name="afk_footer_stats">%1$s · %2$d-day streak</string>
+    <plurals name="afk_sits_count">
+        <item quantity="one">%d sit</item>
+        <item quantity="other">%d sits</item>
+    </plurals>
+
+    <!-- Reminder banner -->
+    <string name="afk_banner_app">afk</string>
+    <string name="afk_banner_now">now</string>
+    <string name="afk_banner_title">Time to reset</string>
+    <string name="afk_banner_body">You’ve been heads-down for a while. Close your eyes for a minute.</string>
+    <string name="afk_banner_later">Later</string>
+    <string name="afk_banner_reset">Reset</string>
+    <string name="afk_banner_icon_content_description">afk reminder</string>
+
+    <!-- Loading / error -->
+    <string name="afk_loading">Loading</string>
+    <string name="afk_error_title">Something interrupted your calm.</string>
+    <string name="afk_retry">Try again</string>
+
+    <!-- Stub destinations (Session / Settings not yet built) -->
+    <string name="afk_coming_soon">Coming soon</string>
+    <string name="afk_back">Back</string>
+    <string name="afk_settings_title">Settings</string>
+
+    <!-- Science-of-closing-your-eyes quotes shown on Home. The two arrays are parallel. -->
+    <string-array name="afk_eye_fact_texts">
+        <item>Close your eyes and the brain slips into alpha rhythm — the 8–12 Hz wave of calm, wakeful rest.</item>
+        <item>Nearly a third of your cortex is devoted to vision. Shut your eyes and you hand that capacity back.</item>
+        <item>Eyes closed, the default mode network takes over — where the mind wanders, reflects, and consolidates.</item>
+        <item>A brief eyes-closed pause lowers cortical arousal, slows the breath, and settles the heart rate.</item>
+        <item>Just 60 seconds with eyes shut measurably reduces visual fatigue and mental load.</item>
+    </string-array>
+    <string-array name="afk_eye_fact_sources">
+        <item>Berger · first human EEG, 1929</item>
+        <item>visual neuroscience</item>
+        <item>Raichle · default mode network</item>
+        <item>psychophysiology</item>
+        <item>attention restoration research</item>
+    </string-array>
+</resources>

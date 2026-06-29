@@ -15,5 +15,7 @@ android {
 
 dependencies {
     implementation(project(":feature:home"))
+    implementation(project(":model"))
+    implementation(project(":repository"))
     implementation(libs.timber)
 }

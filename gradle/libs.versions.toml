@@ -9,6 +9,9 @@ hilt = "2.49"
 hiltJetpack = "1.2.0"
 coroutines = "1.8.1"
 orbit = "6.1.0"
+navigationCompose = "2.8.4"
+lifecycleRuntimeCompose = "2.8.7"
+datastore = "1.1.1"
 compileSdk = "34"
 targetSdk = "34"
 minSdk = "21"
@@ -33,9 +36,16 @@ hilt-navigationCompose = "androidx.hilt:hilt-navigation-compose:1.2.0"
 orbit-core    = { module = "org.orbit-mvi:orbit-core", version.ref = "orbit" }
 orbit-vm      = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbit" }
 orbit-compose = { module = "org.orbit-mvi:orbit-compose", version.ref = "orbit" }
+orbit-test    = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
+
+androidx-navigation-compose       = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-lifecycle-runtimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
+
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 coroutines-core    = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+coroutines-test    = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
 timber = "com.jakewharton.timber:timber:5.0.1"
 
@@ -48,6 +58,7 @@ androidx-test-espressoCore = "androidx.test.espresso:espresso-core:3.6.1"
 # Plugin classpaths (consumed by build-logic)
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "gradlePlugin" }
 kotlin-gradlePlugin  = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-composeCompilerGradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin     = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 hilt-gradlePlugin    = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 
