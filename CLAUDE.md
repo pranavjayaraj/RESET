@@ -4,9 +4,6 @@
 
 > structure, conventions, and rules below so the codebase stays consistent.
 >
-> **Living reference:** `feature/chats/chatroom/src/main/java/sharechat/feature/chatroom/consultation/onboarding/`
-> (the FriendZone onboarding feature). Whenever this document is ambiguous, open that
-> folder and follow what the code actually does.
 
 ---
 
@@ -53,16 +50,7 @@ feature/.../<feature>/
 - Annotate `@AndroidEntryPoint`; extend `AppCompatActivity`.
 - Expose a `companion object` with extra keys and an intent factory — never construct the
   `Intent` at the call site.
-  ```kotlin
-  companion object {
-      const val CHATROOM_ID = "chatroom_id"
-      const val REFERRER = "referrer"
-      fun getActivityIntent(context: Context, chatRoomId: String?, referrer: String?): Intent =
-          Intent(context, FriendZoneOnboardingActivity::class.java).apply {
-              putExtra(CHATROOM_ID, chatRoomId)
-              putExtra(REFERRER, referrer)
-          }
-  }
+  ```kotlin 
   ```
 - Obtain the ViewModel with `by viewModels<XxxViewModel>()`.
 - Host Compose inside the theme; pass the ViewModel **as a lambda** and pass result
