@@ -6,8 +6,11 @@ import com.reset.model.domain.model.HomePreferences
 import com.reset.model.domain.model.ChimeKind
 import com.reset.model.domain.model.EyeFact
 import com.reset.model.domain.model.SessionStats
+import com.reset.navigation.AppDestination
+import com.reset.navigation.NavEvent
 import com.reset.feature.home.navigation.HomeIntent
 import com.reset.feature.home.navigation.HomeSideEffect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -20,8 +23,9 @@ class HomeViewModelTest {
 
     private fun viewModel(
         repository: FakeHomeRepository = FakeHomeRepository(),
+        navigator: FakeNavigator = FakeNavigator(),
         random: Random = Random(SEED),
-    ) = HomeViewModel(SavedStateHandle(), repository, EyeFactProvider(random))
+    ) = HomeViewModel(SavedStateHandle(), repository, EyeFactProvider(random), navigator)
 
     @Test
     fun `load surfaces persisted prefs and stats as Content`() = runTest {
@@ -89,7 +93,7 @@ class HomeViewModelTest {
 
             val leaving = awaitUntil { it.leaving }
             assertTrue(leaving.leaving)
-            assertEquals(HomeScreen.Home, leaving.screen)
+            assertEquals(HomeStep.Home, leaving.screen)
 
             assertEquals(HomeSideEffect.PlayChime(ChimeKind.Start), awaitSideEffect())
 
@@ -112,27 +116,29 @@ class HomeViewModelTest {
 
             containerHost.handleHomeIntent(HomeIntent.LeaveAnimationFinished)
 
-            val session = awaitUntil { it.screen == HomeScreen.Session }
+            val session = awaitUntil { it.screen == HomeStep.Session }
             assertFalse(session.leaving)
             assertEquals(5 * 60, session.remainingSeconds)
-            assertEquals(HomeSideEffect.ShowSessionScreen, awaitSideEffect())
 
             cancelAndIgnoreRemainingItems()
         }
     }
 
     @Test
-    fun `opening settings navigates to the settings screen`() = runTest {
+    fun `opening settings navigates via the navigator and stays on home`() = runTest {
         val repo = FakeHomeRepository(HomePreferences(remindersEnabled = false))
+        val navigator = FakeNavigator()
 
-        viewModel(repo).test(this) {
+        viewModel(repo, navigator).test(this) {
             expectInitialState()
             containerHost.handleHomeIntent(HomeIntent.Load)
             awaitUntil { it.status is HomeStatus.Content }
 
             containerHost.handleHomeIntent(HomeIntent.OpenSettings)
-            assertEquals(HomeScreen.Settings, awaitUntil { it.screen == HomeScreen.Settings }.screen)
-            assertEquals(HomeSideEffect.ShowSettingsScreen, awaitSideEffect())
+
+            // Settings is a separate feature — Home stays put and emits a nav event.
+            assertEquals(NavEvent.Navigate(AppDestination.Settings), navigator.events.first())
+            assertEquals(HomeStep.Home, containerHost.stateFlow().value.screen)
 
             cancelAndIgnoreRemainingItems()
         }

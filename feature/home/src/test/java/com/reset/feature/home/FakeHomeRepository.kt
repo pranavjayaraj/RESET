@@ -36,4 +36,16 @@ class FakeHomeRepository(
         lastRemindersEnabled = enabled
         preferencesFlow.value = preferencesFlow.value.copy(remindersEnabled = enabled)
     }
+
+    override suspend fun setReminderEveryMin(minutes: Int) {
+        preferencesFlow.value = preferencesFlow.value.copy(remindersEveryMin = minutes)
+    }
+
+    override suspend fun setReminderStartHour(hour: Int) {
+        preferencesFlow.value = preferencesFlow.value.copy(remindersStartHour = hour)
+    }
+
+    override suspend fun setReminderEndHour(hour: Int) {
+        preferencesFlow.value = preferencesFlow.value.copy(remindersEndHour = hour)
+    }
 }

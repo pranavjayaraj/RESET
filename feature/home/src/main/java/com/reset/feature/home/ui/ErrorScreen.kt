@@ -17,10 +17,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.reset.feature.home.R
-import com.reset.feature.home.ui.theme.HomeColors
-import com.reset.feature.home.ui.theme.HomeDimens
-import com.reset.feature.home.ui.theme.HomeShapes
-import com.reset.feature.home.ui.theme.HomeType
+import com.reset.core.designsystem.AppColors
+import com.reset.core.designsystem.AppDimens
+import com.reset.core.designsystem.AppShapes
+import com.reset.core.designsystem.AppType
 
 @Composable
 fun ErrorScreen(onRetry: () -> Unit, modifier: Modifier = Modifier) {
@@ -31,23 +31,23 @@ fun ErrorScreen(onRetry: () -> Unit, modifier: Modifier = Modifier) {
     ) {
         Text(
             text = stringResource(R.string.afk_error_title),
-            style = HomeType.errorTitle,
-            color = HomeColors.textPrimary,
+            style = AppType.errorTitle,
+            color = AppColors.textPrimary,
             textAlign = TextAlign.Center,
         )
         Box(
             Modifier
                 .padding(top = 16.dp)
-                .height(HomeDimens.touchTargetMin)
-                .clip(HomeShapes.banner)
-                .background(HomeColors.textPrimary)
+                .height(AppDimens.touchTargetMin)
+                .clip(AppShapes.banner)
+                .background(AppColors.textPrimary)
                 .clickable(onClick = onRetry),
             contentAlignment = Alignment.Center,
         ) {
             Text(
                 text = stringResource(R.string.afk_retry),
-                style = HomeType.bannerButton,
-                color = HomeColors.onDeep,
+                style = AppType.bannerButton,
+                color = AppColors.onDeep,
                 modifier = Modifier.padding(horizontal = 24.dp),
             )
         }

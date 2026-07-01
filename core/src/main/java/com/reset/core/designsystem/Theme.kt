@@ -1,4 +1,4 @@
-package com.reset.feature.home.ui.theme
+package com.reset.core.designsystem
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.geometry.Offset
@@ -11,15 +11,16 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.reset.feature.home.R
+import com.reset.core.R
 
 /**
- * Centralised AFK design tokens (the "Sage" palette from the approved design).
- * Screens reference these instead of hardcoding colours, type, or dimensions.
+ * Centralised app design tokens (the "Sage" palette from the approved design).
+ * Shared across feature modules — screens reference these instead of hardcoding
+ * colours, type, or dimensions.
  */
 
 // ── Fonts ─────────────────────────────────────────────────────
-object HomeFonts {
+object AppFonts {
     val Display = FontFamily(Font(R.font.michroma_regular))
     val Sans = FontFamily(
         Font(R.font.nunito_regular, FontWeight.Normal),
@@ -34,7 +35,7 @@ object HomeFonts {
 }
 
 // ── Colours ───────────────────────────────────────────────────
-object HomeColors {
+object AppColors {
     val on = Color(0xFF367C6B)
     val onDeep = Color(0xFF265A4F)
     val accent = Color(0xFF52A88F)
@@ -73,7 +74,7 @@ object HomeColors {
 }
 
 // ── Shapes ────────────────────────────────────────────────────
-object HomeShapes {
+object AppShapes {
     val quote = RoundedCornerShape(18.dp)
     val pill = RoundedCornerShape(percent = 50)
     val banner = RoundedCornerShape(22.dp)
@@ -82,7 +83,7 @@ object HomeShapes {
 }
 
 // ── Dimensions ────────────────────────────────────────────────
-object HomeDimens {
+object AppDimens {
     val screenPaddingH = 24.dp
     val screenPaddingV = 16.dp
 
@@ -99,33 +100,33 @@ object HomeDimens {
 }
 
 // ── Type scale ────────────────────────────────────────────────
-object HomeType {
-    val wordmark = TextStyle(fontFamily = HomeFonts.Display, fontSize = 16.sp, letterSpacing = 2.sp)
+object AppType {
+    val wordmark = TextStyle(fontFamily = AppFonts.Display, fontSize = 16.sp, letterSpacing = 2.sp)
 
     val quoteText = TextStyle(
-        fontFamily = HomeFonts.Sans,
+        fontFamily = AppFonts.Sans,
         fontSize = 14.5.sp,
         lineHeight = 20.6.sp,
         fontWeight = FontWeight.SemiBold,
         fontStyle = FontStyle.Italic,
     )
-    val quoteSource = TextStyle(fontFamily = HomeFonts.Mono, fontSize = 10.sp, letterSpacing = 0.5.sp)
+    val quoteSource = TextStyle(fontFamily = AppFonts.Mono, fontSize = 10.sp, letterSpacing = 0.5.sp)
 
-    val segValue = TextStyle(fontFamily = HomeFonts.Sans, fontSize = 21.sp, fontWeight = FontWeight.ExtraBold)
-    val segUnit = TextStyle(fontFamily = HomeFonts.Mono, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+    val segValue = TextStyle(fontFamily = AppFonts.Sans, fontSize = 21.sp, fontWeight = FontWeight.ExtraBold)
+    val segUnit = TextStyle(fontFamily = AppFonts.Mono, fontSize = 11.sp, fontWeight = FontWeight.Medium)
 
-    val bubbleTop = TextStyle(fontFamily = HomeFonts.Mono, fontSize = 11.sp, letterSpacing = 0.5.sp)
-    val bubbleMain = TextStyle(fontFamily = HomeFonts.Sans, fontSize = 36.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.5).sp)
-    val bubbleSub = TextStyle(fontFamily = HomeFonts.Mono, fontSize = 11.sp)
+    val bubbleTop = TextStyle(fontFamily = AppFonts.Mono, fontSize = 11.sp, letterSpacing = 0.5.sp)
+    val bubbleMain = TextStyle(fontFamily = AppFonts.Sans, fontSize = 36.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.5).sp)
+    val bubbleSub = TextStyle(fontFamily = AppFonts.Mono, fontSize = 11.sp)
 
-    val footer = TextStyle(fontFamily = HomeFonts.Mono, fontSize = 11.sp)
+    val footer = TextStyle(fontFamily = AppFonts.Mono, fontSize = 11.sp)
 
-    val bannerApp = TextStyle(fontFamily = HomeFonts.Mono, fontSize = 11.sp, letterSpacing = 1.sp)
-    val bannerTime = TextStyle(fontFamily = HomeFonts.Mono, fontSize = 11.sp)
-    val bannerTitle = TextStyle(fontFamily = HomeFonts.Sans, fontSize = 17.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.2).sp)
-    val bannerBody = TextStyle(fontFamily = HomeFonts.Sans, fontSize = 13.5.sp, lineHeight = 18.9.sp)
-    val bannerButton = TextStyle(fontFamily = HomeFonts.Sans, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+    val bannerApp = TextStyle(fontFamily = AppFonts.Mono, fontSize = 11.sp, letterSpacing = 1.sp)
+    val bannerTime = TextStyle(fontFamily = AppFonts.Mono, fontSize = 11.sp)
+    val bannerTitle = TextStyle(fontFamily = AppFonts.Sans, fontSize = 17.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.2).sp)
+    val bannerBody = TextStyle(fontFamily = AppFonts.Sans, fontSize = 13.5.sp, lineHeight = 18.9.sp)
+    val bannerButton = TextStyle(fontFamily = AppFonts.Sans, fontSize = 14.sp, fontWeight = FontWeight.Bold)
 
-    val errorTitle = TextStyle(fontFamily = HomeFonts.Sans, fontSize = 18.sp, fontWeight = FontWeight.ExtraBold)
-    val stubTitle = TextStyle(fontFamily = HomeFonts.Display, fontSize = 16.sp, letterSpacing = 2.sp)
+    val errorTitle = TextStyle(fontFamily = AppFonts.Sans, fontSize = 18.sp, fontWeight = FontWeight.ExtraBold)
+    val stubTitle = TextStyle(fontFamily = AppFonts.Display, fontSize = 16.sp, letterSpacing = 2.sp)
 }

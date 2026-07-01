@@ -17,4 +17,10 @@ interface HomeRepository {
     suspend fun setDuration(minutes: Int)
 
     suspend fun setRemindersEnabled(enabled: Boolean)
+
+    suspend fun setReminderEveryMin(minutes: Int)
+
+    suspend fun setReminderStartHour(hour: Int)
+
+    suspend fun setReminderEndHour(hour: Int)
 }

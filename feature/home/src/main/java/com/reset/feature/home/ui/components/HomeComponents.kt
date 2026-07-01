@@ -31,10 +31,13 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.reset.feature.home.R
-import com.reset.feature.home.ui.theme.HomeColors
-import com.reset.feature.home.ui.theme.HomeDimens
-import com.reset.feature.home.ui.theme.HomeShapes
-import com.reset.feature.home.ui.theme.HomeType
+import com.reset.core.designsystem.AppColors
+import com.reset.core.designsystem.AppDimens
+import com.reset.core.designsystem.AppShapes
+import com.reset.core.designsystem.AppType
+import com.reset.core.designsystem.ClosedEyeIcon
+import com.reset.core.designsystem.GearIcon
+import com.reset.core.designsystem.glass
 
 /** 48dp glass settings button with the spoke gear icon. */
 @Composable
@@ -42,14 +45,14 @@ fun GearIconButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     val label = stringResource(R.string.afk_settings)
     Box(
         modifier
-            .size(HomeDimens.gearSize)
-            .clip(HomeShapes.pill)
-            .glass(HomeShapes.pill)
+            .size(AppDimens.gearSize)
+            .clip(AppShapes.pill)
+            .glass(AppShapes.pill)
             .clickable(onClick = onClick)
             .semantics { contentDescription = label },
         contentAlignment = Alignment.Center,
     ) {
-        GearIcon(Modifier.size(22.dp), tint = HomeColors.textPrimary)
+        GearIcon(Modifier.size(22.dp), tint = AppColors.textPrimary)
     }
 }
 
@@ -59,12 +62,12 @@ fun QuoteCard(text: String, source: String, modifier: Modifier = Modifier) {
     Column(
         modifier
             .fillMaxWidth()
-            .glass(HomeShapes.quote)
-            .padding(HomeDimens.quotePadding),
+            .glass(AppShapes.quote)
+            .padding(AppDimens.quotePadding),
         verticalArrangement = Arrangement.spacedBy(9.dp),
     ) {
-        Text(text, style = HomeType.quoteText, color = HomeColors.textStrong)
-        Text(source, style = HomeType.quoteSource, color = HomeColors.textFaint)
+        Text(text, style = AppType.quoteText, color = AppColors.textStrong)
+        Text(source, style = AppType.quoteSource, color = AppColors.textFaint)
     }
 }
 
@@ -78,7 +81,7 @@ fun DurationSelector(
 ) {
     val unit = stringResource(R.string.afk_minutes_unit)
     Row(
-        modifier.glass(HomeShapes.pill).padding(6.dp),
+        modifier.glass(AppShapes.pill).padding(6.dp),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         options.forEach { minutes ->
@@ -86,10 +89,10 @@ fun DurationSelector(
             val label = pluralStringResource(R.plurals.afk_select_duration_content_description, minutes, minutes)
             Row(
                 Modifier
-                    .clip(HomeShapes.pill)
-                    .then(if (active) Modifier.background(HomeColors.glassActiveFill, HomeShapes.pill) else Modifier)
+                    .clip(AppShapes.pill)
+                    .then(if (active) Modifier.background(AppColors.glassActiveFill, AppShapes.pill) else Modifier)
                     .clickable { onSelect(minutes) }
-                    .defaultMinSize(minHeight = HomeDimens.touchTargetMin)
+                    .defaultMinSize(minHeight = AppDimens.touchTargetMin)
                     .padding(horizontal = 26.dp, vertical = 9.dp)
                     .clearAndSetSemantics { contentDescription = label },
                 verticalAlignment = Alignment.Bottom,
@@ -97,13 +100,13 @@ fun DurationSelector(
             ) {
                 Text(
                     text = minutes.toString(),
-                    style = HomeType.segValue,
-                    color = if (active) HomeColors.on else HomeColors.textSecondary,
+                    style = AppType.segValue,
+                    color = if (active) AppColors.on else AppColors.textSecondary,
                 )
                 Text(
                     text = unit,
-                    style = HomeType.segUnit,
-                    color = if (active) HomeColors.on else HomeColors.textTertiary,
+                    style = AppType.segUnit,
+                    color = if (active) AppColors.on else AppColors.textTertiary,
                 )
             }
         }
@@ -127,35 +130,35 @@ fun ReminderBanner(
         Column(
             Modifier
                 .fillMaxWidth()
-                .clip(HomeShapes.banner)
-                .background(HomeColors.bannerScrim)
-                .border(1.dp, HomeColors.bannerBorder, HomeShapes.banner)
-                .padding(HomeDimens.bannerPadding),
+                .clip(AppShapes.banner)
+                .background(AppColors.bannerScrim)
+                .border(1.dp, AppColors.bannerBorder, AppShapes.banner)
+                .padding(AppDimens.bannerPadding),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Box(
-                    Modifier.size(22.dp).clip(HomeShapes.notifIcon).background(HomeColors.accent),
+                    Modifier.size(22.dp).clip(AppShapes.notifIcon).background(AppColors.accent),
                     contentAlignment = Alignment.Center,
                 ) {
                     ClosedEyeIcon(
                         Modifier
                             .size(15.dp)
                             .semantics { contentDescription = "" },
-                        tint = HomeColors.textPrimary,
+                        tint = AppColors.textPrimary,
                     )
                 }
                 Text(
                     stringResource(R.string.afk_banner_app).uppercase(),
-                    style = HomeType.bannerApp,
-                    color = HomeColors.textTertiary,
+                    style = AppType.bannerApp,
+                    color = AppColors.textTertiary,
                 )
                 Spacer(Modifier.weight(1f))
-                Text(stringResource(R.string.afk_banner_now), style = HomeType.bannerTime, color = HomeColors.textFaint)
+                Text(stringResource(R.string.afk_banner_now), style = AppType.bannerTime, color = AppColors.textFaint)
             }
             Spacer(Modifier.height(7.dp))
-            Text(stringResource(R.string.afk_banner_title), style = HomeType.bannerTitle, color = HomeColors.textPrimary)
+            Text(stringResource(R.string.afk_banner_title), style = AppType.bannerTitle, color = AppColors.textPrimary)
             Spacer(Modifier.height(3.dp))
-            Text(stringResource(R.string.afk_banner_body), style = HomeType.bannerBody, color = HomeColors.textSecondary)
+            Text(stringResource(R.string.afk_banner_body), style = AppType.bannerBody, color = AppColors.textSecondary)
             Spacer(Modifier.height(12.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 BannerButton(
@@ -184,13 +187,13 @@ private fun BannerButton(
 ) {
     Box(
         modifier
-            .height(HomeDimens.touchTargetMin)
-            .clip(HomeShapes.bannerButton)
+            .height(AppDimens.touchTargetMin)
+            .clip(AppShapes.bannerButton)
             .then(
                 if (primary) {
-                    Modifier.background(HomeColors.textPrimary)
+                    Modifier.background(AppColors.textPrimary)
                 } else {
-                    Modifier.glass(HomeShapes.bannerButton)
+                    Modifier.glass(AppShapes.bannerButton)
                 },
             )
             .clickable(onClick = onClick),
@@ -198,8 +201,8 @@ private fun BannerButton(
     ) {
         Text(
             text = text,
-            style = HomeType.bannerButton,
-            color = if (primary) HomeColors.onDeep else HomeColors.textPrimary,
+            style = AppType.bannerButton,
+            color = if (primary) AppColors.onDeep else AppColors.textPrimary,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(horizontal = 12.dp),
         )

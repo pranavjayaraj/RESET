@@ -7,6 +7,8 @@ import com.reset.feature.home.HomeConstants.SESSION_TICK_MS
 import com.reset.model.domain.HomeRepository
 import com.reset.model.domain.EyeFactProvider
 import com.reset.model.domain.model.ChimeKind
+import com.reset.navigation.AppDestination
+import com.reset.navigation.Navigator
 import com.reset.feature.home.navigation.HomeIntent
 import com.reset.feature.home.navigation.HomeSideEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +25,7 @@ class HomeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: HomeRepository,
     private val eyeFactProvider: EyeFactProvider,
+    private val navigator: Navigator,
 ) : BaseViewModel<HomeState, HomeSideEffect>(savedStateHandle) {
 
     override fun initialState() = HomeState.getDefault()
@@ -47,15 +50,12 @@ class HomeViewModel @Inject constructor(
         reduce { state.copy(status = HomeStatus.Loading, fact = eyeFactProvider.random()) }
         scheduleReminderBanner()
         // The preferences/stats flow stays hot for the whole session so the UI tracks
-        // later changes (e.g. duration writes). Navigation, however, is a one-shot:
-        // re-posting ShowHomeScreen on every emission would re-navigate the NavHost,
-        // tearing down HomeScreen and restarting its infinite animations (the "blink").
+        // later changes (e.g. duration writes). Load state (Loading/Content/Error) is a
+        // pure state transition — the host renders the right screen from it.
         combine(repository.preferences, repository.stats) { prefs, stats -> prefs to stats }
             .catch { error ->
                 reduce { state.copy(status = HomeStatus.Error(error.message)) }
-                postSideEffect(HomeSideEffect.ShowErrorScreen)
-            }
-            .collect { (prefs, stats) ->
+            }.collect { (prefs, stats) ->
                 reduce {
                     state.copy(
                         status = HomeStatus.Content,
@@ -63,19 +63,18 @@ class HomeViewModel @Inject constructor(
                         remindersEnabled = prefs.remindersEnabled,
                         stats = stats,
                     )
-                }                
+                }
             }
     }
 
     private fun retry() = intent {
-        postSideEffect(HomeSideEffect.ShowLoadingScreen)
         load()
     }
 
     private fun scheduleReminderBanner() = intent {
         delay(REMINDER_BANNER_DELAY_MS)
         reduce {
-            if (state.remindersEnabled && state.screen == HomeScreen.Home && !state.leaving) {
+            if (state.remindersEnabled && state.screen == HomeStep.Home && !state.leaving) {
                 state.copy(showReminderBanner = true)
             } else {
                 state
@@ -89,24 +88,24 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun tapReset() = intent {
-        if (state.leaving || state.screen == HomeScreen.Session) return@intent
+        if (state.leaving || state.screen == HomeStep.Session) return@intent
         // Kick off the departure spin on Home. The transition to the session is driven
         // by the UI once the animation completes (HomeIntent.LeaveAnimationFinished).
         reduce { state.copy(leaving = true, showReminderBanner = false) }
         postSideEffect(HomeSideEffect.PlayChime(ChimeKind.Start))
     }
 
-    /** Advances to the meditation session once the leave animation has finished. */
+    /** Advances to the meditation session (an intra-feature state change) once the leave
+     *  animation has finished. */
     private fun beginSession() = intent {
         if (!state.leaving) return@intent
         reduce {
             state.copy(
-                screen = HomeScreen.Session,
+                screen = HomeStep.Session,
                 leaving = false,
                 remainingSeconds = state.durationMin * 60,
             )
         }
-        postSideEffect(HomeSideEffect.ShowSessionScreen)
         runSessionCountdown()
     }
 
@@ -115,26 +114,25 @@ class HomeViewModel @Inject constructor(
      * current screen so leaving the session (back / finish) stops the loop.
      */
     private fun runSessionCountdown() = intent {
-        while (state.screen == HomeScreen.Session && state.remainingSeconds > 0) {
+        while (state.screen == HomeStep.Session && state.remainingSeconds > 0) {
             delay(SESSION_TICK_MS)
             reduce {
-                if (state.screen == HomeScreen.Session) {
+                if (state.screen == HomeStep.Session) {
                     state.copy(remainingSeconds = (state.remainingSeconds - 1).coerceAtLeast(0))
                 } else {
                     state
                 }
             }
         }
-        if (state.screen == HomeScreen.Session && state.remainingSeconds == 0) {
+        if (state.screen == HomeStep.Session && state.remainingSeconds == 0) {
             postSideEffect(HomeSideEffect.PlayChime(ChimeKind.End))
             finishSession()
         }
     }
 
     private fun finishSession() = intent {
-        if (state.screen != HomeScreen.Session) return@intent
-        reduce { state.copy(screen = HomeScreen.Home, remainingSeconds = 0, leaving = false) }
-        postSideEffect(HomeSideEffect.NavigateHome)
+        if (state.screen != HomeStep.Session) return@intent
+        reduce { state.copy(screen = HomeStep.Home, remainingSeconds = 0, leaving = false) }
     }
 
     private fun dismissBanner() = intent {
@@ -142,16 +140,14 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun openSettings() = intent {
-        reduce { state.copy(screen = HomeScreen.Settings, showReminderBanner = false) }
-        postSideEffect(HomeSideEffect.ShowSettingsScreen)
+        reduce { state.copy(showReminderBanner = false) }
+        navigator.navigate(AppDestination.Settings)
     }
 
     private fun onBackPress() = intent {
-        if (state.screen == HomeScreen.Home) {
-            postSideEffect(HomeSideEffect.CloseActivity)
-        } else {
-            reduce { state.copy(screen = HomeScreen.Home) }
-            postSideEffect(HomeSideEffect.NavigateHome)
+        when (state.screen) {
+            HomeStep.Home -> navigator.exit()
+            HomeStep.Session -> reduce { state.copy(screen = HomeStep.Home, remainingSeconds = 0, leaving = false) }
         }
     }
 }

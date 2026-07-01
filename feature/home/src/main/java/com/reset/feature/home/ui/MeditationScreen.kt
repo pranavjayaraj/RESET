@@ -31,12 +31,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.reset.feature.home.HomeConstants
 import com.reset.feature.home.R
-import com.reset.feature.home.ui.components.BackIcon
-import com.reset.feature.home.ui.components.glass
-import com.reset.feature.home.ui.theme.HomeColors
-import com.reset.feature.home.ui.theme.HomeDimens
-import com.reset.feature.home.ui.theme.HomeShapes
-import com.reset.feature.home.ui.theme.HomeType
+import com.reset.core.designsystem.BackIcon
+import com.reset.core.designsystem.glass
+import com.reset.core.designsystem.AppColors
+import com.reset.core.designsystem.AppDimens
+import com.reset.core.designsystem.AppShapes
+import com.reset.core.designsystem.AppType
 
 private const val BREATHE_PERIOD_MS = 9_000
 
@@ -62,19 +62,19 @@ fun MeditationScreen(
             Box(
                 Modifier
                     .align(Alignment.CenterStart)
-                    .size(HomeDimens.gearSize)
-                    .clip(HomeShapes.pill)
-                    .glass(HomeShapes.pill)
+                    .size(AppDimens.gearSize)
+                    .clip(AppShapes.pill)
+                    .glass(AppShapes.pill)
                     .clickable(onClick = onBack)
                     .semantics { contentDescription = backLabel },
                 contentAlignment = Alignment.Center,
             ) {
-                BackIcon(Modifier.size(22.dp), tint = HomeColors.textPrimary)
+                BackIcon(Modifier.size(22.dp), tint = AppColors.textPrimary)
             }
             Text(
                 text = stringResource(R.string.afk_meditation_title),
-                style = HomeType.stubTitle,
-                color = HomeColors.textPrimary,
+                style = AppType.stubTitle,
+                color = AppColors.textPrimary,
                 modifier = Modifier.align(Alignment.Center),
             )
         }
@@ -85,8 +85,8 @@ fun MeditationScreen(
 
         Text(
             text = stringResource(R.string.afk_meditation_hint),
-            style = HomeType.bannerBody,
-            color = HomeColors.textSecondary,
+            style = AppType.bannerBody,
+            color = AppColors.textSecondary,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 24.dp, start = 24.dp, end = 24.dp),
         )
@@ -112,7 +112,7 @@ private fun BreathingCountdown(durationMin: Int, remainingSeconds: Int, modifier
 
     Box(
         modifier
-            .size(HomeDimens.bubbleSize)
+            .size(AppDimens.bubbleSize)
             .scale(breathe)
             .clip(CircleShape)
             .glass(CircleShape)
@@ -126,14 +126,14 @@ private fun BreathingCountdown(durationMin: Int, remainingSeconds: Int, modifier
         ) {
             Text(
                 text = stringResource(R.string.afk_meditation_breathe),
-                style = HomeType.bubbleTop,
-                color = HomeColors.textSecondary,
+                style = AppType.bubbleTop,
+                color = AppColors.textSecondary,
             )
-            Text(text = countdown, style = HomeType.bubbleMain, color = HomeColors.textPrimary)
+            Text(text = countdown, style = AppType.bubbleMain, color = AppColors.textPrimary)
             Text(
                 text = stringResource(R.string.afk_bubble_sub, durationMin),
-                style = HomeType.bubbleSub,
-                color = HomeColors.textTertiary,
+                style = AppType.bubbleSub,
+                color = AppColors.textTertiary,
             )
         }
     }
@@ -143,16 +143,16 @@ private fun BreathingCountdown(durationMin: Int, remainingSeconds: Int, modifier
 private fun FinishButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     Box(
         modifier
-            .clip(HomeShapes.pill)
-            .glass(HomeShapes.pill)
+            .clip(AppShapes.pill)
+            .glass(AppShapes.pill)
             .clickable(onClick = onClick)
             .padding(horizontal = 40.dp, vertical = 14.dp),
         contentAlignment = Alignment.Center,
     ) {
         Text(
             text = stringResource(R.string.afk_meditation_finish),
-            style = HomeType.bannerButton,
-            color = HomeColors.textPrimary,
+            style = AppType.bannerButton,
+            color = AppColors.textPrimary,
         )
     }
 }

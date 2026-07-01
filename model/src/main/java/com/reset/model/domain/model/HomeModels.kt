@@ -4,12 +4,26 @@ package com.reset.model.domain.model
 data class HomePreferences(
     val durationMin: Int = DEFAULT_DURATION_MIN,
     val remindersEnabled: Boolean = true,
+    val remindersEveryMin: Int = DEFAULT_REMINDER_EVERY_MIN,
+    val remindersStartHour: Int = DEFAULT_REMINDER_START_HOUR,
+    val remindersEndHour: Int = DEFAULT_REMINDER_END_HOUR,
 ) {
     companion object {
         const val DEFAULT_DURATION_MIN = 5
 
         /** Durations offered by the Home segmented control, in minutes. */
         val DURATION_OPTIONS = listOf(3, 5)
+
+        const val DEFAULT_REMINDER_EVERY_MIN = 60
+        const val DEFAULT_REMINDER_START_HOUR = 9
+        const val DEFAULT_REMINDER_END_HOUR = 18
+
+        /** Reminder cadences offered by the Settings frequency grid, in minutes. */
+        val REMINDER_EVERY_OPTIONS = listOf(30, 60, 90, 120)
+
+        /** Earliest / latest hour a reminder window boundary may take (24h clock). */
+        const val MIN_HOUR = 0
+        const val MAX_HOUR = 24
     }
 }
 
