@@ -8,8 +8,8 @@ android {
 
 dependencies {
     implementation(project(":model"))
+    implementation(project(":navigation"))
     implementation(libs.coroutines.core)
-    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.compose.activity)
 

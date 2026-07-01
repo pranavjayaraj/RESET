@@ -37,10 +37,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.reset.feature.home.HomeConstants
-import com.reset.feature.home.ui.theme.HomeColors
-import com.reset.feature.home.ui.theme.HomeDimens
-import com.reset.feature.home.ui.theme.HomeShapes
-import com.reset.feature.home.ui.theme.HomeType
+import com.reset.core.designsystem.AppColors
+import com.reset.core.designsystem.AppDimens
+import com.reset.core.designsystem.AppShapes
+import com.reset.core.designsystem.AppType
+import com.reset.core.designsystem.glass
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
@@ -89,13 +90,13 @@ fun BreathingBubble(
     )
 
     val density = LocalDensity.current
-    val orbitRadiusPx = with(density) { HomeDimens.orbitRadius.toPx() }
+    val orbitRadiusPx = with(density) { AppDimens.orbitRadius.toPx() }
 
-    Box(modifier = modifier.size(HomeDimens.ringB), contentAlignment = Alignment.Center) {
+    Box(modifier = modifier.size(AppDimens.ringB), contentAlignment = Alignment.Center) {
         // pulsing aura
         Box(
             Modifier
-                .size(HomeDimens.aura)
+                .size(AppDimens.aura)
                 .scale(breathe)
                 .alpha((breathe - 0.55f).coerceIn(0.4f, 1f))
                 .background(
@@ -106,8 +107,8 @@ fun BreathingBubble(
                 ),
         )
         // concentric rings
-        Box(Modifier.size(HomeDimens.ringB).clip(CircleShape).border(1.dp, Color.White.copy(alpha = 0.14f), CircleShape))
-        Box(Modifier.size(HomeDimens.ringA).clip(CircleShape).border(1.dp, HomeColors.glassBorder, CircleShape))
+        Box(Modifier.size(AppDimens.ringB).clip(CircleShape).border(1.dp, Color.White.copy(alpha = 0.14f), CircleShape))
+        Box(Modifier.size(AppDimens.ringA).clip(CircleShape).border(1.dp, AppColors.glassBorder, CircleShape))
 
         // orbiting words — on leave, start slow, accelerate into a fast spin, then vanish
         val leaveSpin by animateFloatAsState(
@@ -133,13 +134,13 @@ fun BreathingBubble(
                         )
                     }
                     .alpha(wordAlpha)
-                    .glass(HomeShapes.pill)
+                    .glass(AppShapes.pill)
                     .padding(horizontal = 15.dp, vertical = 8.dp),
             ) {
                 Text(
                     text = word,
-                    style = HomeType.bubbleSub.copy(fontSize = HomeType.bubbleTop.fontSize),
-                    color = HomeColors.textStrong,
+                    style = AppType.bubbleSub.copy(fontSize = AppType.bubbleTop.fontSize),
+                    color = AppColors.textStrong,
                 )
             }
         }
@@ -147,7 +148,7 @@ fun BreathingBubble(
         // central bubble
         Box(
             Modifier
-                .size(HomeDimens.bubbleSize)
+                .size(AppDimens.bubbleSize)
                 .clip(CircleShape)
                 .background(
                     Brush.radialGradient(
@@ -167,9 +168,9 @@ fun BreathingBubble(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
-                Text(topLabel, style = HomeType.bubbleTop, color = HomeColors.textSecondary)
-                Text(title, style = HomeType.bubbleMain, color = HomeColors.textPrimary, textAlign = TextAlign.Center)
-                Text(subLabel, style = HomeType.bubbleSub, color = HomeColors.textTertiary)
+                Text(topLabel, style = AppType.bubbleTop, color = AppColors.textSecondary)
+                Text(title, style = AppType.bubbleMain, color = AppColors.textPrimary, textAlign = TextAlign.Center)
+                Text(subLabel, style = AppType.bubbleSub, color = AppColors.textTertiary)
             }
         }
     }

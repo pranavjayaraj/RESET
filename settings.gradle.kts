@@ -19,6 +19,8 @@ dependencyResolutionManagement {
 
 include(":app")
 include(":core")
+include(":navigation")
 include(":feature:home")
+include(":feature:settings")
 include(":model")
 include(":repository")

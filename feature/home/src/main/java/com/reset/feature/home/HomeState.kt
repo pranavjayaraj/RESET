@@ -8,14 +8,14 @@ import com.reset.model.domain.model.SessionStats
  * Immutable UI state for the AFK feature.
  *
  * [status] is the initial data-load lifecycle (loading / content / error) and [screen]
- * is the current destination within the flow. Actual screen rendering is driven by the
- * NavHost via navigation side effects; these fields let the ViewModel own load-state and
- * back-press logic. Build new state only with [getDefault] + `copy`.
+ * is the current Home sub-screen. `HomeRoute` renders directly from these fields; cross-
+ * feature navigation goes through the injected Navigator, not state. Build new state only
+ * with [getDefault] + `copy`.
  */
 @Stable
 data class HomeState(
     val status: HomeStatus = HomeStatus.Loading,
-    val screen: HomeScreen = HomeScreen.Home,
+    val screen: HomeStep = HomeStep.Home,
     val fact: EyeFact = EyeFact(index = 0),
     val durationMin: Int = 5,
     val stats: SessionStats = SessionStats(),
@@ -37,13 +37,10 @@ sealed interface HomeStatus {
     data class Error(val message: String?) : HomeStatus
 }
 
-/** Destination within the single-Activity AFK flow. */
-sealed interface HomeScreen {
-    data object Home : HomeScreen
+/** Which Home sub-screen is showing — an intra-feature transition, not app navigation. */
+sealed interface HomeStep {
+    data object Home : HomeStep
 
     /** The meditation session, with its own countdown screen. */
-    data object Session : HomeScreen
-
-    /** Built in a later milestone; rendered as a stub for now. */
-    data object Settings : HomeScreen
+    data object Session : HomeStep
 }

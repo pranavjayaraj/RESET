@@ -26,8 +26,8 @@ import com.reset.feature.home.ui.components.DurationSelector
 import com.reset.feature.home.ui.components.GearIconButton
 import com.reset.feature.home.ui.components.QuoteCard
 import com.reset.feature.home.ui.components.ReminderBanner
-import com.reset.feature.home.ui.theme.HomeColors
-import com.reset.feature.home.ui.theme.HomeType
+import com.reset.core.designsystem.AppColors
+import com.reset.core.designsystem.AppType
 
 @Composable
 fun HomeScreen(
@@ -105,8 +105,8 @@ private fun FooterStats(stats: SessionStats, modifier: Modifier = Modifier) {
     }
     Text(
         text = text,
-        style = HomeType.footer,
-        color = HomeColors.textFaint,
+        style = AppType.footer,
+        color = AppColors.textFaint,
         textAlign = TextAlign.Center,
         modifier = modifier.fillMaxWidth().padding(top = 8.dp),
     )

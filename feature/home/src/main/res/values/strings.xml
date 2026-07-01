@@ -45,10 +45,8 @@
     <string name="afk_error_title">Something interrupted your calm.</string>
     <string name="afk_retry">Try again</string>
 
-    <!-- Stub destinations (Settings not yet built) -->
-    <string name="afk_coming_soon">Coming soon</string>
+    <!-- Shared navigation affordance (meditation back button). -->
     <string name="afk_back">Back</string>
-    <string name="afk_settings_title">Settings</string>
 
     <!-- Meditation session -->
     <string name="afk_meditation_title">Reset</string>

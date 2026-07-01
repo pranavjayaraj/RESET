@@ -1,4 +1,4 @@
-package com.reset.feature.home.ui.components
+package com.reset.core.designsystem
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
-import com.reset.feature.home.ui.theme.HomeColors
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -21,7 +20,7 @@ import kotlin.math.sin
 private const val GRID = 24f
 
 @Composable
-fun GearIcon(modifier: Modifier = Modifier, tint: Color = HomeColors.textPrimary) {
+fun GearIcon(modifier: Modifier = Modifier, tint: Color = AppColors.textPrimary) {
     Canvas(modifier) {
         val s = size.minDimension
         val unit = s / GRID
@@ -45,7 +44,7 @@ fun GearIcon(modifier: Modifier = Modifier, tint: Color = HomeColors.textPrimary
 }
 
 @Composable
-fun BackIcon(modifier: Modifier = Modifier, tint: Color = HomeColors.textPrimary) {
+fun BackIcon(modifier: Modifier = Modifier, tint: Color = AppColors.textPrimary) {
     Canvas(modifier) {
         val unit = size.minDimension / GRID
         fun p(x: Float, y: Float) = Offset(x * unit, y * unit)
@@ -59,7 +58,7 @@ fun BackIcon(modifier: Modifier = Modifier, tint: Color = HomeColors.textPrimary
 }
 
 @Composable
-fun ClosedEyeIcon(modifier: Modifier = Modifier, tint: Color = HomeColors.textPrimary) {
+fun ClosedEyeIcon(modifier: Modifier = Modifier, tint: Color = AppColors.textPrimary) {
     Canvas(modifier) {
         val unit = size.minDimension / GRID
         fun x(v: Float) = v * unit
