@@ -1,4 +1,4 @@
-# RESET APP
+# RESET App
 
 An App for Mental Wellness
 
