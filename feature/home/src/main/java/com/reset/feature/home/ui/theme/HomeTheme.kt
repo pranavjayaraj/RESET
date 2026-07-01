@@ -19,7 +19,7 @@ import com.reset.feature.home.R
  */
 
 // ── Fonts ─────────────────────────────────────────────────────
-object AfkFonts {
+object HomeFonts {
     val Display = FontFamily(Font(R.font.michroma_regular))
     val Sans = FontFamily(
         Font(R.font.nunito_regular, FontWeight.Normal),
@@ -34,7 +34,7 @@ object AfkFonts {
 }
 
 // ── Colours ───────────────────────────────────────────────────
-object AfkColors {
+object HomeColors {
     val on = Color(0xFF367C6B)
     val onDeep = Color(0xFF265A4F)
     val accent = Color(0xFF52A88F)
@@ -73,7 +73,7 @@ object AfkColors {
 }
 
 // ── Shapes ────────────────────────────────────────────────────
-object AfkShapes {
+object HomeShapes {
     val quote = RoundedCornerShape(18.dp)
     val pill = RoundedCornerShape(percent = 50)
     val banner = RoundedCornerShape(22.dp)
@@ -82,7 +82,7 @@ object AfkShapes {
 }
 
 // ── Dimensions ────────────────────────────────────────────────
-object AfkDimens {
+object HomeDimens {
     val screenPaddingH = 24.dp
     val screenPaddingV = 16.dp
 
@@ -99,33 +99,33 @@ object AfkDimens {
 }
 
 // ── Type scale ────────────────────────────────────────────────
-object AfkType {
-    val wordmark = TextStyle(fontFamily = AfkFonts.Display, fontSize = 16.sp, letterSpacing = 2.sp)
+object HomeType {
+    val wordmark = TextStyle(fontFamily = HomeFonts.Display, fontSize = 16.sp, letterSpacing = 2.sp)
 
     val quoteText = TextStyle(
-        fontFamily = AfkFonts.Sans,
+        fontFamily = HomeFonts.Sans,
         fontSize = 14.5.sp,
         lineHeight = 20.6.sp,
         fontWeight = FontWeight.SemiBold,
         fontStyle = FontStyle.Italic,
     )
-    val quoteSource = TextStyle(fontFamily = AfkFonts.Mono, fontSize = 10.sp, letterSpacing = 0.5.sp)
+    val quoteSource = TextStyle(fontFamily = HomeFonts.Mono, fontSize = 10.sp, letterSpacing = 0.5.sp)
 
-    val segValue = TextStyle(fontFamily = AfkFonts.Sans, fontSize = 21.sp, fontWeight = FontWeight.ExtraBold)
-    val segUnit = TextStyle(fontFamily = AfkFonts.Mono, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+    val segValue = TextStyle(fontFamily = HomeFonts.Sans, fontSize = 21.sp, fontWeight = FontWeight.ExtraBold)
+    val segUnit = TextStyle(fontFamily = HomeFonts.Mono, fontSize = 11.sp, fontWeight = FontWeight.Medium)
 
-    val bubbleTop = TextStyle(fontFamily = AfkFonts.Mono, fontSize = 11.sp, letterSpacing = 0.5.sp)
-    val bubbleMain = TextStyle(fontFamily = AfkFonts.Sans, fontSize = 36.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.5).sp)
-    val bubbleSub = TextStyle(fontFamily = AfkFonts.Mono, fontSize = 11.sp)
+    val bubbleTop = TextStyle(fontFamily = HomeFonts.Mono, fontSize = 11.sp, letterSpacing = 0.5.sp)
+    val bubbleMain = TextStyle(fontFamily = HomeFonts.Sans, fontSize = 36.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.5).sp)
+    val bubbleSub = TextStyle(fontFamily = HomeFonts.Mono, fontSize = 11.sp)
 
-    val footer = TextStyle(fontFamily = AfkFonts.Mono, fontSize = 11.sp)
+    val footer = TextStyle(fontFamily = HomeFonts.Mono, fontSize = 11.sp)
 
-    val bannerApp = TextStyle(fontFamily = AfkFonts.Mono, fontSize = 11.sp, letterSpacing = 1.sp)
-    val bannerTime = TextStyle(fontFamily = AfkFonts.Mono, fontSize = 11.sp)
-    val bannerTitle = TextStyle(fontFamily = AfkFonts.Sans, fontSize = 17.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.2).sp)
-    val bannerBody = TextStyle(fontFamily = AfkFonts.Sans, fontSize = 13.5.sp, lineHeight = 18.9.sp)
-    val bannerButton = TextStyle(fontFamily = AfkFonts.Sans, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+    val bannerApp = TextStyle(fontFamily = HomeFonts.Mono, fontSize = 11.sp, letterSpacing = 1.sp)
+    val bannerTime = TextStyle(fontFamily = HomeFonts.Mono, fontSize = 11.sp)
+    val bannerTitle = TextStyle(fontFamily = HomeFonts.Sans, fontSize = 17.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.2).sp)
+    val bannerBody = TextStyle(fontFamily = HomeFonts.Sans, fontSize = 13.5.sp, lineHeight = 18.9.sp)
+    val bannerButton = TextStyle(fontFamily = HomeFonts.Sans, fontSize = 14.sp, fontWeight = FontWeight.Bold)
 
-    val errorTitle = TextStyle(fontFamily = AfkFonts.Sans, fontSize = 18.sp, fontWeight = FontWeight.ExtraBold)
-    val stubTitle = TextStyle(fontFamily = AfkFonts.Display, fontSize = 16.sp, letterSpacing = 2.sp)
+    val errorTitle = TextStyle(fontFamily = HomeFonts.Sans, fontSize = 18.sp, fontWeight = FontWeight.ExtraBold)
+    val stubTitle = TextStyle(fontFamily = HomeFonts.Display, fontSize = 16.sp, letterSpacing = 2.sp)
 }

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.reset.model.domain.AfkRepository
+import com.reset.model.domain.HomeRepository
 import com.reset.model.domain.SoundController
 import dagger.Binds
 import dagger.Module
@@ -19,12 +19,13 @@ private val Context.afkDataStore: DataStore<Preferences> by preferencesDataStore
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class AfkModule {
+abstract class HomeModule {
 
     @Binds
-    abstract fun bindAfkRepository(impl: AfkRepositoryImpl): AfkRepository
+    abstract fun bindHomeRepository(impl: HomeRepositoryImpl): HomeRepository
 
     @Binds
+    @Singleton
     abstract fun bindSoundController(impl: AndroidSoundController): SoundController
 
     companion object {

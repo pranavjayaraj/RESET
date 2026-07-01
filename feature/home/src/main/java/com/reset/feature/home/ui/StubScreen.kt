@@ -18,10 +18,10 @@ import androidx.compose.ui.unit.dp
 import com.reset.feature.home.R
 import com.reset.feature.home.ui.components.BackIcon
 import com.reset.feature.home.ui.components.glass
-import com.reset.feature.home.ui.theme.AfkColors
-import com.reset.feature.home.ui.theme.AfkDimens
-import com.reset.feature.home.ui.theme.AfkShapes
-import com.reset.feature.home.ui.theme.AfkType
+import com.reset.feature.home.ui.theme.HomeColors
+import com.reset.feature.home.ui.theme.HomeDimens
+import com.reset.feature.home.ui.theme.HomeShapes
+import com.reset.feature.home.ui.theme.HomeType
 
 /** Placeholder for screens not yet built in this milestone (Session / Settings). */
 @Composable
@@ -32,27 +32,27 @@ fun StubScreen(title: String, onBack: () -> Unit, modifier: Modifier = Modifier)
             Box(
                 Modifier
                     .align(Alignment.CenterStart)
-                    .size(AfkDimens.gearSize)
-                    .clip(AfkShapes.pill)
-                    .glass(AfkShapes.pill)
+                    .size(HomeDimens.gearSize)
+                    .clip(HomeShapes.pill)
+                    .glass(HomeShapes.pill)
                     .clickable(onClick = onBack)
                     .semantics { contentDescription = backLabel },
                 contentAlignment = Alignment.Center,
             ) {
-                BackIcon(Modifier.size(22.dp), tint = AfkColors.textPrimary)
+                BackIcon(Modifier.size(22.dp), tint = HomeColors.textPrimary)
             }
             Text(
                 text = title,
-                style = AfkType.stubTitle,
-                color = AfkColors.textPrimary,
+                style = HomeType.stubTitle,
+                color = HomeColors.textPrimary,
                 modifier = Modifier.align(Alignment.Center),
             )
         }
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
                 text = stringResource(R.string.afk_coming_soon),
-                style = AfkType.bannerTitle,
-                color = AfkColors.textSecondary,
+                style = HomeType.bannerTitle,
+                color = HomeColors.textSecondary,
             )
         }
     }

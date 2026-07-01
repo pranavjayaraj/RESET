@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name="com.reset.feature.home.AfkActivity"
+            android:name="com.reset.feature.home.HomeActivity"
             android:exported="false"
             android:theme="@android:style/Theme.Material.NoActionBar" />
     </application>

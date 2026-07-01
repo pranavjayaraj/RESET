@@ -15,30 +15,30 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.reset.feature.home.AfkConstants
-import com.reset.feature.home.AfkState
+import com.reset.feature.home.HomeConstants
+import com.reset.feature.home.HomeState
 import com.reset.feature.home.R
-import com.reset.feature.home.navigation.AfkIntent
-import com.reset.model.domain.model.AfkPreferences
+import com.reset.feature.home.navigation.HomeIntent
+import com.reset.model.domain.model.HomePreferences
 import com.reset.model.domain.model.SessionStats
 import com.reset.feature.home.ui.components.BreathingBubble
 import com.reset.feature.home.ui.components.DurationSelector
 import com.reset.feature.home.ui.components.GearIconButton
 import com.reset.feature.home.ui.components.QuoteCard
 import com.reset.feature.home.ui.components.ReminderBanner
-import com.reset.feature.home.ui.theme.AfkColors
-import com.reset.feature.home.ui.theme.AfkType
+import com.reset.feature.home.ui.theme.HomeColors
+import com.reset.feature.home.ui.theme.HomeType
 
 @Composable
 fun HomeScreen(
-    state: AfkState,
-    onIntent: (AfkIntent) -> Unit,
+    state: HomeState,
+    onIntent: (HomeIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val factTexts = AfkConstants.factTexts
-    val factSources = AfkConstants.factSources
-    val resetWords = AfkConstants.resetWords
-    val factIndex = AfkConstants.getFactIndex(state)
+    val factTexts = HomeConstants.factTexts
+    val factSources = HomeConstants.factSources
+    val resetWords = HomeConstants.resetWords
+    val factIndex = HomeConstants.getFactIndex(state)
 
     Box(modifier.fillMaxSize()) {
         Column(
@@ -47,7 +47,7 @@ fun HomeScreen(
         ) {
             Box(Modifier.fillMaxWidth()) {
                 GearIconButton(
-                    onClick = { onIntent(AfkIntent.OpenSettings) },
+                    onClick = { onIntent(HomeIntent.OpenSettings) },
                     modifier = Modifier.align(Alignment.CenterEnd),
                 )
             }
@@ -57,9 +57,9 @@ fun HomeScreen(
             Spacer(Modifier.weight(0.4f))
 
             DurationSelector(
-                options = AfkPreferences.DURATION_OPTIONS,
+                options = HomePreferences.DURATION_OPTIONS,
                 selected = state.durationMin,
-                onSelect = { onIntent(AfkIntent.SelectDuration(it)) },
+                onSelect = { onIntent(HomeIntent.SelectDuration(it)) },
             )
 
             Spacer(Modifier.weight(1f))
@@ -75,7 +75,8 @@ fun HomeScreen(
                 ),
                 words = resetWords,
                 leaving = state.leaving,
-                onReset = { onIntent(AfkIntent.TapReset) },
+                onReset = { onIntent(HomeIntent.TapReset) },
+                onLeaveFinished = { onIntent(HomeIntent.LeaveAnimationFinished) },
             )
 
             Spacer(Modifier.weight(1f))
@@ -85,8 +86,8 @@ fun HomeScreen(
 
         ReminderBanner(
             visible = state.showReminderBanner,
-            onLater = { onIntent(AfkIntent.DismissReminderBanner) },
-            onReset = { onIntent(AfkIntent.TapReset) },
+            onLater = { onIntent(HomeIntent.DismissReminderBanner) },
+            onReset = { onIntent(HomeIntent.TapReset) },
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .fillMaxWidth(),
@@ -104,8 +105,8 @@ private fun FooterStats(stats: SessionStats, modifier: Modifier = Modifier) {
     }
     Text(
         text = text,
-        style = AfkType.footer,
-        color = AfkColors.textFaint,
+        style = HomeType.footer,
+        color = HomeColors.textFaint,
         textAlign = TextAlign.Center,
         modifier = modifier.fillMaxWidth().padding(top = 8.dp),
     )

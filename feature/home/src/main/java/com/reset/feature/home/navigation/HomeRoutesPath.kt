@@ -4,12 +4,12 @@ import androidx.annotation.StringDef
 
 @Retention(AnnotationRetention.SOURCE)
 @StringDef(
-    AfkRoutesPath.LOADING_SCREEN,
-    AfkRoutesPath.SESSION_SCREEN,
-    AfkRoutesPath.SETTINGS_SCREEN,
-    AfkRoutesPath.ERROR_SCREEN,
+    HomeRoutesPath.LOADING_SCREEN,
+    HomeRoutesPath.SESSION_SCREEN,
+    HomeRoutesPath.SETTINGS_SCREEN,
+    HomeRoutesPath.ERROR_SCREEN,
 )
-annotation class AfkRoutesPath {
+annotation class HomeRoutesPath {
     companion object {
         const val LOADING_SCREEN = "loading_screen"
         const val HOME_SCREEN = "home_screen"
