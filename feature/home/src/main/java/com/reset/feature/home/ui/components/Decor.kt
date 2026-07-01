@@ -8,15 +8,15 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
-import com.reset.feature.home.ui.theme.AfkColors
+import com.reset.feature.home.ui.theme.HomeColors
 
 /**
  * The frosted "glass" recipe from the design. Real backdrop blur is API 31+, so
  * over the gradient this is approximated with translucent fill + a hairline border.
  */
 fun Modifier.glass(shape: Shape): Modifier = this
-    .background(AfkColors.glassFill, shape)
-    .border(1.dp, AfkColors.glassBorder, shape)
+    .background(HomeColors.glassFill, shape)
+    .border(1.dp, HomeColors.glassBorder, shape)
 
 /** Faint concentric arcs echoing the reference page, drawn behind the content. */
 @androidx.compose.runtime.Composable
@@ -29,7 +29,7 @@ fun ConcentricArcs(modifier: Modifier = Modifier) {
         var r = step
         while (r < maxR) {
             drawCircle(
-                color = AfkColors.arcDecoration,
+                color = HomeColors.arcDecoration,
                 radius = r,
                 center = Offset(originX, originY),
                 style = Stroke(width = 1.dp.toPx()),

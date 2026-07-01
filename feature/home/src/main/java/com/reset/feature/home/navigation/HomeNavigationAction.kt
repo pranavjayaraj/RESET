@@ -3,7 +3,7 @@ package com.reset.feature.home.navigation
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.navigation.NavController
 
-interface AfkNavigationAction {
+interface HomeNavigationAction {
     fun openLoadingScreen()
     fun openHomeScreen()
     fun openSessionScreen()
@@ -12,42 +12,42 @@ interface AfkNavigationAction {
     fun backToHome()
 }
 
-internal class AfkNavigationActionImpl(
+internal class HomeNavigationActionImpl(
     private val navController: NavController,
-) : AfkNavigationAction {
+) : HomeNavigationAction {
 
     override fun openLoadingScreen() {
-        AfkNavigationRoutes.LoadingScreen.navigateSingleTop(navController)
+        HomeNavigationRoutes.LoadingScreen.navigateSingleTop(navController)
     }
 
     /** Lands on Home and clears the loading/error entry so back exits the flow. */
     override fun openHomeScreen() {
-        navController.navigate(AfkNavigationRoutes.HomeScreen.route) {
+        navController.navigate(HomeNavigationRoutes.HomeScreen.route) {
             popUpTo(navController.graph.startDestinationId) { inclusive = true }
             launchSingleTop = true
         }
     }
 
     override fun openSessionScreen() {
-        AfkNavigationRoutes.SessionScreen.navigate(navController)
+        HomeNavigationRoutes.SessionScreen.navigate(navController)
     }
 
     override fun openSettingsScreen() {
-        AfkNavigationRoutes.SettingsScreen.navigate(navController)
+        HomeNavigationRoutes.SettingsScreen.navigate(navController)
     }
 
     override fun openErrorScreen() {
-        navController.navigate(AfkNavigationRoutes.ErrorScreen.route) {
+        navController.navigate(HomeNavigationRoutes.ErrorScreen.route) {
             popUpTo(navController.graph.startDestinationId) { inclusive = true }
             launchSingleTop = true
         }
     }
 
     override fun backToHome() {
-        navController.popBackStack(AfkNavigationRoutes.HomeScreen.route, inclusive = false)
+        navController.popBackStack(HomeNavigationRoutes.HomeScreen.route, inclusive = false)
     }
 }
 
-val LocalAfkNavigationAction = staticCompositionLocalOf<AfkNavigationAction> {
-    error("No AfkNavigationAction specified")
+val LocalHomeNavigationAction = staticCompositionLocalOf<HomeNavigationAction> {
+    error("No HomeNavigationAction specified")
 }

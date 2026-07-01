@@ -3,8 +3,8 @@ package com.reset.repository.data
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
-import com.reset.repository.data.AfkRepositoryImpl
-import com.reset.model.domain.model.AfkPreferences
+import com.reset.repository.data.HomeRepositoryImpl
+import com.reset.model.domain.model.HomePreferences
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -16,16 +16,16 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
 
-class AfkRepositoryImplTest {
+class HomeRepositoryImplTest {
 
     @get:Rule
     val tmp = TemporaryFolder()
 
-    private fun TestScope.repository(): AfkRepositoryImpl {
+    private fun TestScope.repository(): HomeRepositoryImpl {
         val store: DataStore<Preferences> = PreferenceDataStoreFactory.create(scope = backgroundScope) {
             File(tmp.root, "afk_${System.nanoTime()}.preferences_pb")
         }
-        return AfkRepositoryImpl(store)
+        return HomeRepositoryImpl(store)
     }
 
     @Test
@@ -33,7 +33,7 @@ class AfkRepositoryImplTest {
         val repo = repository()
 
         val prefs = repo.preferences.first()
-        assertEquals(AfkPreferences.DEFAULT_DURATION_MIN, prefs.durationMin)
+        assertEquals(HomePreferences.DEFAULT_DURATION_MIN, prefs.durationMin)
         assertTrue(prefs.remindersEnabled)
 
         val stats = repo.stats.first()

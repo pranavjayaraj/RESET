@@ -5,21 +5,21 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
-import com.reset.model.domain.AfkRepository
-import com.reset.model.domain.model.AfkPreferences
+import com.reset.model.domain.HomeRepository
+import com.reset.model.domain.model.HomePreferences
 import com.reset.model.domain.model.SessionStats
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-/** [AfkRepository] backed by Jetpack [DataStore] preferences. */
-class AfkRepositoryImpl @Inject constructor(
+/** [HomeRepository] backed by Jetpack [DataStore] preferences. */
+class HomeRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
-) : AfkRepository {
+) : HomeRepository {
 
-    override val preferences: Flow<AfkPreferences> = dataStore.data.map { prefs ->
-        AfkPreferences(
-            durationMin = prefs[KEY_DURATION] ?: AfkPreferences.DEFAULT_DURATION_MIN,
+    override val preferences: Flow<HomePreferences> = dataStore.data.map { prefs ->
+        HomePreferences(
+            durationMin = prefs[KEY_DURATION] ?: HomePreferences.DEFAULT_DURATION_MIN,
             remindersEnabled = prefs[KEY_REMINDERS_ENABLED] ?: true,
         )
     }

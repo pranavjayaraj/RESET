@@ -7,9 +7,9 @@ import org.orbitmvi.orbit.test.OrbitTestContext
  * tests ignore intermediate emissions (e.g. the transient Loading state) without
  * depending on exactly how many reductions occurred.
  */
-suspend fun OrbitTestContext<AfkState, *, *>.awaitUntil(
-    predicate: (AfkState) -> Boolean,
-): AfkState {
+suspend fun OrbitTestContext<HomeState, *, *>.awaitUntil(
+    predicate: (HomeState) -> Boolean,
+): HomeState {
     var state = awaitState()
     while (!predicate(state)) {
         state = awaitState()

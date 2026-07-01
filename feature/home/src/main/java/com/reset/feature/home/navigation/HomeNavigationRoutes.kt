@@ -3,25 +3,25 @@ package com.reset.feature.home.navigation
 import android.os.Bundle
 import androidx.navigation.NavController
 
-sealed class AfkNavigationRoutes(val route: String) {
+sealed class HomeNavigationRoutes(val route: String) {
 
-    object LoadingScreen : AfkNavigationRoutes(AfkRoutesPath.LOADING_SCREEN) {
+    object LoadingScreen : HomeNavigationRoutes(HomeRoutesPath.LOADING_SCREEN) {
         override fun getNavigationRoute(arguments: Bundle?): String = route
     }
 
-    object HomeScreen : AfkNavigationRoutes(AfkRoutesPath.HOME_SCREEN) {
+    object HomeScreen : HomeNavigationRoutes(HomeRoutesPath.HOME_SCREEN) {
         override fun getNavigationRoute(arguments: Bundle?): String = route
     }
 
-    object SessionScreen : AfkNavigationRoutes(AfkRoutesPath.SESSION_SCREEN) {
+    object SessionScreen : HomeNavigationRoutes(HomeRoutesPath.SESSION_SCREEN) {
         override fun getNavigationRoute(arguments: Bundle?): String = route
     }
 
-    object SettingsScreen : AfkNavigationRoutes(AfkRoutesPath.SETTINGS_SCREEN) {
+    object SettingsScreen : HomeNavigationRoutes(HomeRoutesPath.SETTINGS_SCREEN) {
         override fun getNavigationRoute(arguments: Bundle?): String = route
     }
 
-    object ErrorScreen : AfkNavigationRoutes(AfkRoutesPath.ERROR_SCREEN) {
+    object ErrorScreen : HomeNavigationRoutes(HomeRoutesPath.ERROR_SCREEN) {
         override fun getNavigationRoute(arguments: Bundle?): String = route
     }
 

@@ -1,8 +1,10 @@
 package com.reset.feature.home.ui.components
 
+import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
@@ -34,10 +36,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.reset.feature.home.ui.theme.AfkColors
-import com.reset.feature.home.ui.theme.AfkDimens
-import com.reset.feature.home.ui.theme.AfkShapes
-import com.reset.feature.home.ui.theme.AfkType
+import com.reset.feature.home.HomeConstants
+import com.reset.feature.home.ui.theme.HomeColors
+import com.reset.feature.home.ui.theme.HomeDimens
+import com.reset.feature.home.ui.theme.HomeShapes
+import com.reset.feature.home.ui.theme.HomeType
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
@@ -48,10 +51,16 @@ private val ORBIT_ANGLES = listOf(225f, 315f, 135f, 45f)
 private const val ORBIT_PERIOD_MS = 42_000
 private const val BREATHE_PERIOD_MS = 9_000
 
+/** Degrees the words whip through as they spin away when a sit begins (3 full turns). */
+private const val LEAVE_SPIN_DEGREES = 1_080f
+
+/** Ease-in curve so the departure starts slow, accelerates, then fades at the end. */
+private val LeaveEasing = CubicBezierEasing(0.5f, 0f, 0.9f, 0.2f)
+
 /**
  * The breathing "Reset" bubble: a pulsing aura + rings, four words orbiting it,
- * and the central tappable bubble. When [leaving] is true the words spiral
- * outward and fade as the sit begins.
+ * and the central tappable bubble. When [leaving] is true the words spin very
+ * fast and vanish as the sit begins.
  */
 @Composable
 fun BreathingBubble(
@@ -62,6 +71,7 @@ fun BreathingBubble(
     words: List<String>,
     leaving: Boolean,
     onReset: () -> Unit,
+    onLeaveFinished: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val transition = rememberInfiniteTransition(label = "bubble")
@@ -79,14 +89,13 @@ fun BreathingBubble(
     )
 
     val density = LocalDensity.current
-    val orbitRadiusPx = with(density) { AfkDimens.orbitRadius.toPx() }
-    val flungRadiusPx = with(density) { 600.dp.toPx() }
+    val orbitRadiusPx = with(density) { HomeDimens.orbitRadius.toPx() }
 
-    Box(modifier = modifier.size(AfkDimens.ringB), contentAlignment = Alignment.Center) {
+    Box(modifier = modifier.size(HomeDimens.ringB), contentAlignment = Alignment.Center) {
         // pulsing aura
         Box(
             Modifier
-                .size(AfkDimens.aura)
+                .size(HomeDimens.aura)
                 .scale(breathe)
                 .alpha((breathe - 0.55f).coerceIn(0.4f, 1f))
                 .background(
@@ -97,31 +106,40 @@ fun BreathingBubble(
                 ),
         )
         // concentric rings
-        Box(Modifier.size(AfkDimens.ringB).clip(CircleShape).border(1.dp, Color.White.copy(alpha = 0.14f), CircleShape))
-        Box(Modifier.size(AfkDimens.ringA).clip(CircleShape).border(1.dp, AfkColors.glassBorder, CircleShape))
+        Box(Modifier.size(HomeDimens.ringB).clip(CircleShape).border(1.dp, Color.White.copy(alpha = 0.14f), CircleShape))
+        Box(Modifier.size(HomeDimens.ringA).clip(CircleShape).border(1.dp, HomeColors.glassBorder, CircleShape))
 
-        // orbiting words
-        val wordAlpha = if (leaving) 0f else 1f
+        // orbiting words — on leave, start slow, accelerate into a fast spin, then vanish
+        val leaveSpin by animateFloatAsState(
+            targetValue = if (leaving) LEAVE_SPIN_DEGREES else 0f,
+            animationSpec = tween(HomeConstants.LEAVE_ANIMATION_MS.toInt(), easing = LeaveEasing),
+            label = "wordSpin",
+        )
+        val wordAlpha by animateFloatAsState(
+            targetValue = if (leaving) 0f else 1f,
+            animationSpec = tween(HomeConstants.LEAVE_ANIMATION_MS.toInt(), easing = LeaveEasing),
+            finishedListener = { if (leaving) onLeaveFinished() },
+            label = "wordAlpha",
+        )
         words.forEachIndexed { i, word ->
             val baseAngle = ORBIT_ANGLES.getOrElse(i) { 0f }
-            val angleRad = Math.toRadians((baseAngle + rotation).toDouble())
-            val radius = if (leaving) flungRadiusPx else orbitRadiusPx
+            val angleRad = Math.toRadians((baseAngle + rotation + leaveSpin).toDouble())
             Box(
                 Modifier
                     .offset {
                         IntOffset(
-                            x = (cos(angleRad) * radius).roundToInt(),
-                            y = (sin(angleRad) * radius).roundToInt(),
+                            x = (cos(angleRad) * orbitRadiusPx).roundToInt(),
+                            y = (sin(angleRad) * orbitRadiusPx).roundToInt(),
                         )
                     }
                     .alpha(wordAlpha)
-                    .glass(AfkShapes.pill)
+                    .glass(HomeShapes.pill)
                     .padding(horizontal = 15.dp, vertical = 8.dp),
             ) {
                 Text(
                     text = word,
-                    style = AfkType.bubbleSub.copy(fontSize = AfkType.bubbleTop.fontSize),
-                    color = AfkColors.textStrong,
+                    style = HomeType.bubbleSub.copy(fontSize = HomeType.bubbleTop.fontSize),
+                    color = HomeColors.textStrong,
                 )
             }
         }
@@ -129,7 +147,7 @@ fun BreathingBubble(
         // central bubble
         Box(
             Modifier
-                .size(AfkDimens.bubbleSize)
+                .size(HomeDimens.bubbleSize)
                 .clip(CircleShape)
                 .background(
                     Brush.radialGradient(
@@ -149,9 +167,9 @@ fun BreathingBubble(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
-                Text(topLabel, style = AfkType.bubbleTop, color = AfkColors.textSecondary)
-                Text(title, style = AfkType.bubbleMain, color = AfkColors.textPrimary, textAlign = TextAlign.Center)
-                Text(subLabel, style = AfkType.bubbleSub, color = AfkColors.textTertiary)
+                Text(topLabel, style = HomeType.bubbleTop, color = HomeColors.textSecondary)
+                Text(title, style = HomeType.bubbleMain, color = HomeColors.textPrimary, textAlign = TextAlign.Center)
+                Text(subLabel, style = HomeType.bubbleSub, color = HomeColors.textTertiary)
             }
         }
     }

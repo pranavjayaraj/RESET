@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import com.reset.feature.home.R
-import com.reset.feature.home.ui.theme.AfkColors
+import com.reset.feature.home.ui.theme.HomeColors
 
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
@@ -19,6 +19,6 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
         modifier.fillMaxSize().semantics { contentDescription = label },
         contentAlignment = Alignment.Center,
     ) {
-        CircularProgressIndicator(color = AfkColors.textPrimary)
+        CircularProgressIndicator(color = HomeColors.textPrimary)
     }
 }

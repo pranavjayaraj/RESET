@@ -2,7 +2,7 @@ package com.reset.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import com.reset.feature.home.AfkActivity
+import com.reset.feature.home.HomeActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startActivity(AfkActivity.getActivityIntent(this))
+        startActivity(HomeActivity.getActivityIntent(this))
         finish()
     }
 }

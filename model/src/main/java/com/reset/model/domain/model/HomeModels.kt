@@ -1,7 +1,7 @@
 package com.reset.model.domain.model
 
 /** User preferences persisted across launches. */
-data class AfkPreferences(
+data class HomePreferences(
     val durationMin: Int = DEFAULT_DURATION_MIN,
     val remindersEnabled: Boolean = true,
 ) {
