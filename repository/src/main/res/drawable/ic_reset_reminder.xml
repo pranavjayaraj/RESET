@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Closed-eye glyph used as the reminder's small icon (status-bar safe: single color). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M4,9c2.2,2.5 4.9,3.8 8,3.8S17.8,11.5 20,9l1.5,1.3c-0.7,0.8 -1.4,1.5 -2.2,2.1l1.6,2.7 -1.7,1 -1.6,-2.8c-1,0.5 -2,0.8 -3.1,1l0.3,3.2 -2,0.2 -0.3,-3.2c-0.2,0 -0.3,0 -0.5,0s-0.3,0 -0.5,0l-0.3,3.2 -2,-0.2 0.3,-3.2c-1.1,-0.2 -2.1,-0.5 -3.1,-1l-1.6,2.8 -1.7,-1 1.6,-2.7c-0.8,-0.6 -1.5,-1.3 -2.2,-2.1L4,9z" />
+</vector>

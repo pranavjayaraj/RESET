@@ -25,7 +25,6 @@ import com.reset.feature.home.ui.components.BreathingBubble
 import com.reset.feature.home.ui.components.DurationSelector
 import com.reset.feature.home.ui.components.GearIconButton
 import com.reset.feature.home.ui.components.QuoteCard
-import com.reset.feature.home.ui.components.ReminderBanner
 import com.reset.core.designsystem.AppColors
 import com.reset.core.designsystem.AppType
 
@@ -83,15 +82,6 @@ fun HomeScreen(
 
             FooterStats(stats = state.stats)
         }
-
-        ReminderBanner(
-            visible = state.showReminderBanner,
-            onLater = { onIntent(HomeIntent.DismissReminderBanner) },
-            onReset = { onIntent(HomeIntent.TapReset) },
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .fillMaxWidth(),
-        )
     }
 }
 

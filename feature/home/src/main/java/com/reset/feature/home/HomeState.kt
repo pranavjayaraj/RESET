@@ -20,7 +20,6 @@ data class HomeState(
     val durationMin: Int = 5,
     val stats: SessionStats = SessionStats(),
     val remindersEnabled: Boolean = true,
-    val showReminderBanner: Boolean = false,
     val leaving: Boolean = false,
     /** Seconds left in the active meditation session; 0 when no session is running. */
     val remainingSeconds: Int = 0,
