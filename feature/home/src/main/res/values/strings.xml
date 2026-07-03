@@ -31,8 +31,7 @@
         <item quantity="other">%d sits</item>
     </plurals>
 
-    <!-- Loading / error -->
-    <string name="afk_loading">Loading</string>
+    <!-- Error -->
     <string name="afk_error_title">Something interrupted your calm.</string>
     <string name="afk_retry">Try again</string>
 

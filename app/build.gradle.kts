@@ -25,6 +25,8 @@ dependencies {
     // The app host owns the real navigation graph (NavHost) and drives ObserveNavigation,
     // so it depends on navigation-compose directly rather than inheriting it from :navigation.
     implementation(libs.androidx.navigation.compose)
+    // Branded launch: system splash themed via Theme.ResetApp.Starting, held until first frame.
+    implementation(libs.androidx.splashscreen)
     implementation(libs.timber)
     // App-scope coroutine launch of the startup ReminderScheduler sync.
     implementation(libs.coroutines.android)

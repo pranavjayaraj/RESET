@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,6 +18,7 @@ import com.reset.feature.settings.ui.SettingsRoute
 import com.reset.model.domain.ReminderAction
 import com.reset.model.domain.ReminderActionStore
 import com.reset.model.domain.SoundController
+import com.reset.model.domain.StartupState
 import com.reset.repository.notification.NotificationConstants
 import com.reset.repository.notification.ReminderNotificationUtil
 import com.reset.navigation.Navigator
@@ -45,7 +47,14 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var reminderNotificationUtil: ReminderNotificationUtil
 
+    @Inject
+    lateinit var startupState: StartupState
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Must precede super.onCreate(): swaps Theme.ResetApp.Starting for the real theme.
+        // The splash then stays up until the first feature screen has content (or errored),
+        // so the user never sees the empty backdrop while DataStore loads.
+        installSplashScreen().setKeepOnScreenCondition { !startupState.contentReady.value }
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         if (savedInstanceState == null) handleReminderAction(intent)        

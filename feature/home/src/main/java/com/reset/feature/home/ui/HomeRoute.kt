@@ -33,7 +33,9 @@ fun HomeRoute(soundController: SoundController) {
     BackHandler { viewModel.handleHomeIntent(HomeIntent.HandleBackPress) }
 
     when (state.status) {
-        HomeStatus.Loading -> LoadingScreen()
+        // The bare AppBackground gradient is the loading state: it matches the splash and
+        // the theme's windowBackground, so the brief DataStore load reads as one surface.
+        HomeStatus.Loading -> Unit
         is HomeStatus.Error -> ErrorScreen(onRetry = { viewModel.handleHomeIntent(HomeIntent.Retry) })
         HomeStatus.Content -> when (state.screen) {
             HomeStep.Home -> HomeScreen(state = state, onIntent = viewModel::handleHomeIntent)

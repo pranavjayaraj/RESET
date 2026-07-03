@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Mid tone of the rest gradient; the splash canvas fades into the full gradient. -->
+    <color name="splash_background">#7BA79C</color>
+</resources>

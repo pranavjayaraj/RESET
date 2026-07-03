@@ -7,6 +7,7 @@ import com.reset.model.domain.HomeRepository
 import com.reset.model.domain.EyeFactProvider
 import com.reset.model.domain.ReminderAction
 import com.reset.model.domain.ReminderActionStore
+import com.reset.model.domain.StartupState
 import com.reset.model.domain.model.ChimeKind
 import com.reset.feature.home.api.HomeDestination
 import com.reset.feature.settings.api.SettingsDestination
@@ -30,6 +31,7 @@ class HomeViewModel @Inject constructor(
     private val eyeFactProvider: EyeFactProvider,
     private val navigator: Navigator,
     private val reminderActionStore: ReminderActionStore,
+    private val startupState: StartupState,
 ) : BaseViewModel<HomeState, HomeSideEffect>(savedStateHandle) {
 
     override fun initialState() = HomeState.getDefault()
@@ -58,6 +60,8 @@ class HomeViewModel @Inject constructor(
         combine(repository.preferences, repository.stats) { prefs, stats -> prefs to stats }
             .catch { error ->
                 reduce { state.copy(status = HomeStatus.Error(error.message)) }
+                // A failed load still releases the splash — onto the error screen.
+                startupState.markContentReady()
             }.collect { (prefs, stats) ->
                 reduce {
                     state.copy(
@@ -67,6 +71,7 @@ class HomeViewModel @Inject constructor(
                         stats = stats,
                     )
                 }
+                startupState.markContentReady()
             }
     }
 

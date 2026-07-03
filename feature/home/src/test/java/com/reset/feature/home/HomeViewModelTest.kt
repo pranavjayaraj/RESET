@@ -6,6 +6,7 @@ import com.reset.model.domain.ReminderAction
 import com.reset.model.domain.model.HomePreferences
 import com.reset.model.domain.model.ChimeKind
 import com.reset.model.domain.model.EyeFact
+import com.reset.model.domain.StartupState
 import com.reset.model.domain.model.SessionStats
 import com.reset.feature.settings.api.SettingsDestination
 import com.reset.navigation.NavEvent
@@ -27,7 +28,14 @@ class HomeViewModelTest {
         navigator: FakeNavigator = FakeNavigator(),
         random: Random = Random(SEED),
         reminderActionStore: FakeReminderActionStore = FakeReminderActionStore(),
-    ) = HomeViewModel(SavedStateHandle(), repository, EyeFactProvider(random), navigator, reminderActionStore)
+    ) = HomeViewModel(
+        SavedStateHandle(),
+        repository,
+        EyeFactProvider(random),
+        navigator,
+        reminderActionStore,
+        StartupState(),
+    )
 
     @Test
     fun `load surfaces persisted prefs and stats as Content`() = runTest {

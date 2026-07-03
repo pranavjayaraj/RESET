@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- A bare NoActionBar theme; all real styling is handled by Compose / Material3. -->
-    <style name="Theme.ResetApp" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- A bare NoActionBar theme; all real styling is handled by Compose / Material3.
+         windowBackground mirrors the Compose rest gradient so the frames between the
+         splash dismissing and Compose's first draw don't flash a bare window. -->
+    <style name="Theme.ResetApp" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/bg_rest_gradient</item>
+    </style>
+
+    <!-- Launch theme: brands the system splash (Android 12+ always shows one) and holds it
+         until the first frame; the library then swaps to postSplashScreenTheme. On pre-12
+         devices it renders an equivalent splash, so launch looks the same everywhere. -->
+    <style name="Theme.ResetApp.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="postSplashScreenTheme">@style/Theme.ResetApp</item>
+    </style>
 </resources>
