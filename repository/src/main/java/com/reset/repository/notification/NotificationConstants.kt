@@ -26,4 +26,7 @@ object NotificationConstants {
 
     /** Worker input: the epoch millis this run was scheduled to fire at. */
     const val KEY_SCHEDULE_TIME_MS = "schedule_time_ms"
+
+    /** Set by the deeplink trampoline so the host knows the launch came through it. */
+    const val EXTRA_FROM_DEEPLINK_ACTIVITY = "from_deeplink_activity"
 }

@@ -23,5 +23,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Notification-tap trampoline; add intent-filters here when external deeplinks arrive. -->
+        <activity
+            android:name=".DeeplinkHandlerActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.ResetApp" />
     </application>
 </manifest>

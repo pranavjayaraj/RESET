@@ -26,7 +26,7 @@ import javax.inject.Inject
 /**
  * The single host Activity. It owns the [NavHost] and is the only place that knows the
  * navigation graph: features emit events through the injected [Navigator] and
- * [ObserveNavigation] applies them here. [SoundController] is handed to the Home route so
+ * [ObserveNavigation] apWplies them here. [SoundController] is handed to the Home route so
  * the feature can play its chime without owning the audio wiring.
  */
 @AndroidEntryPoint
@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        handleReminderAction(intent)
+        if (savedInstanceState == null) handleReminderAction(intent)        
         setContent {
             MaterialTheme {
                 val navController = rememberNavController()
@@ -73,6 +73,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        setIntent(intent)                                                                                                       
         handleReminderAction(intent)
     }
 
@@ -80,11 +81,18 @@ class MainActivity : ComponentActivity() {
      * Translates the reminder's "Reset" action into pure data for the feature layer:
      * the notification is cleared (action buttons don't auto-cancel) and a
      * [ReminderAction.StartReset] is dispatched for the Home ViewModel to collect.
-     * The store is buffered, so a cold-start dispatch waits for the collector.
+     * The store publishes it as pending state, so a cold-start dispatch simply waits
+     * as the current value until the collector appears.
+     *
+     * Guarded against stale re-delivery: recents relaunches are skipped, and the action is
+     * consumed (nulled) after dispatch so the retained intent can never replay it.
      */
     private fun handleReminderAction(intent: Intent?) {
-        if (intent?.action != NotificationConstants.ACTION_START_RESET) return
+        if (intent == null) return
+        if (intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0) return
+        if (intent.action != NotificationConstants.ACTION_START_RESET) return
         reminderNotificationUtil.cancelReminderNotification()
         reminderActionStore.dispatch(ReminderAction.StartReset)
+        intent.action = null
     }
 }

@@ -1,6 +1,6 @@
 package com.reset.model.domain
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 /** App-level actions a reminder notification can request. Pure data — no platform types. */
 sealed interface ReminderAction {
@@ -10,14 +10,19 @@ sealed interface ReminderAction {
 }
 
 /**
- * Seam between the notification entry point and the feature layer, mirroring the
- * `Navigator` pattern: the host Activity translates a notification action intent into a
- * [ReminderAction], and the owning ViewModel collects [actions] and reacts. Buffered so
- * an action dispatched during a cold launch waits for the collector.
+ * Seam between the notification entry point and the feature layer. Pull semantics, like an
+ * Activity reading its intent: the host publishes the [pending] action as state, and it
+ * stays readable until the handler calls [consume] after acting on it. Delivery therefore
+ * never depends on a collector being live at dispatch time, collector churn can't lose an
+ * action mid-handling, and a stale action can't replay once consumed.
  */
 interface ReminderActionStore {
 
-    val actions: Flow<ReminderAction>
+    /** The action awaiting handling, or null when there is none. */
+    val pending: StateFlow<ReminderAction?>
 
     fun dispatch(action: ReminderAction)
+
+    /** Acknowledge [action] as handled; a no-op if a different action is now pending. */
+    fun consume(action: ReminderAction)
 }

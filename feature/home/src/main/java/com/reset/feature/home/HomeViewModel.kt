@@ -86,26 +86,40 @@ class HomeViewModel @Inject constructor(
         postSideEffect(HomeSideEffect.PlayChime(ChimeKind.Start))
     }
 
-    /** Collects reset requests dispatched by the host when the reminder notification's
-     *  "Reset" action is tapped. */
+    /** Observes the pending reset request published by the host when the reminder
+     *  notification's "Reset" action is tapped. Pull semantics: the action stays pending
+     *  until [startResetFromReminder] consumes it after acting, so it survives collector
+     *  churn and can't half-happen. */
     private fun observeReminderActions() = intent {
-        reminderActionStore.actions.collect { action ->
+        reminderActionStore.pending.collect { action ->
             when (action) {
                 ReminderAction.StartReset -> startResetFromReminder()
+                null -> Unit
             }
         }
     }
 
     /**
      * The notification's "Reset" button: begin sitting right away, skipping the departure
-     * animation (on a cold start Home may not even be composed yet). Waits for content so
-     * the persisted duration is loaded before the countdown starts.
+     * animation (on a cold start Home may not even be composed yet). Waits for the load to
+     * settle so the persisted duration is available. Every exit consumes the action — on
+     * error it is deliberately dropped (the user lands on the error screen), and mid-session
+     * it is a no-op; only then is it acknowledged so a stale request can never linger.
      */
     private fun startResetFromReminder() = intent {
-        stateFlow().first { it.status == HomeStatus.Content }
-        if (state.screen == HomeStep.Session || state.leaving) return@intent
+        val settled = stateFlow().first {
+            it.status == HomeStatus.Content || it.status is HomeStatus.Error
+        }
+        if (settled.status != HomeStatus.Content || state.screen == HomeStep.Session || state.leaving) {
+            reminderActionStore.consume(ReminderAction.StartReset)
+            return@intent
+        }
+        // The user may be on another destination (e.g. Settings); bring Home back on top
+        // so the session is actually visible. No-op when Home is already showing.
+        navigator.popTo(AppDestination.Home)
         postSideEffect(HomeSideEffect.PlayChime(ChimeKind.Start))
         enterSession()
+        reminderActionStore.consume(ReminderAction.StartReset)
     }
 
     /** Advances to the meditation session (an intra-feature state change) once the leave

@@ -7,14 +7,17 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import com.reset.model.domain.EyeFactProvider
 import com.reset.model.domain.HomeRepository
 import com.reset.model.domain.ReminderTimeCalculator
+import com.reset.model.domain.ReminderTypeSelector
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.first
 import java.util.concurrent.TimeUnit
+import kotlin.random.Random
 
 /**
  * Self-chaining one-shot worker behind the reset reminders, following the vibely
@@ -62,6 +65,8 @@ class ReminderNotificationWork(
     interface ReminderNotificationWorkEntryPoint {
         fun homeRepository(): HomeRepository
         fun reminderNotificationUtil(): ReminderNotificationUtil
+        fun eyeFactProvider(): EyeFactProvider
+        fun random(): Random
     }
 
     private lateinit var hiltEntryPoint: ReminderNotificationWorkEntryPoint
@@ -71,6 +76,10 @@ class ReminderNotificationWork(
     private val notificationUtil: ReminderNotificationUtil by lazy {
         hiltEntryPoint.reminderNotificationUtil()
     }
+
+    private val eyeFactProvider: EyeFactProvider by lazy { hiltEntryPoint.eyeFactProvider() }
+
+    private val random: Random by lazy { hiltEntryPoint.random() }
 
     override suspend fun doWork(): Result {
         hiltEntryPoint = EntryPointAccessors.fromApplication(
@@ -85,7 +94,14 @@ class ReminderNotificationWork(
         val now = System.currentTimeMillis()
         // WorkManager can fire late; only post if we are still inside the user's window.
         if (ReminderTimeCalculator.isWithinWindow(now, prefs.remindersStartHour, prefs.remindersEndHour)) {
-            notificationUtil.showReminderNotification()
+            // Variant is picked fresh at fire time — streak from current stats, fact at random.
+            val stats = homeRepository.stats.first()
+            val type = ReminderTypeSelector.select(
+                streakDays = stats.streak,
+                fact = eyeFactProvider.random(),
+                random = random,
+            )
+            notificationUtil.showReminderNotification(type)
         }
 
         val nextDelay = ReminderTimeCalculator.nextTriggerMillis(
