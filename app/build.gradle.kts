@@ -17,7 +17,9 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":navigation"))
     implementation(project(":feature:home"))
+    implementation(project(":feature:home:api"))
     implementation(project(":feature:settings"))
+    implementation(project(":feature:settings:api"))
     implementation(project(":model"))
     implementation(project(":repository"))
     // The app host owns the real navigation graph (NavHost) and drives ObserveNavigation,

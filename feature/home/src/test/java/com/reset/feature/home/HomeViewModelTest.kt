@@ -7,7 +7,7 @@ import com.reset.model.domain.model.HomePreferences
 import com.reset.model.domain.model.ChimeKind
 import com.reset.model.domain.model.EyeFact
 import com.reset.model.domain.model.SessionStats
-import com.reset.navigation.AppDestination
+import com.reset.feature.settings.api.SettingsDestination
 import com.reset.navigation.NavEvent
 import com.reset.feature.home.navigation.HomeIntent
 import com.reset.feature.home.navigation.HomeSideEffect
@@ -139,7 +139,7 @@ class HomeViewModelTest {
             containerHost.handleHomeIntent(HomeIntent.OpenSettings)
 
             // Settings is a separate feature — Home stays put and emits a nav event.
-            assertEquals(NavEvent.Navigate(AppDestination.Settings), navigator.events.first())
+            assertEquals(NavEvent.Navigate(SettingsDestination), navigator.events.first())
             assertEquals(HomeStep.Home, containerHost.stateFlow().value.screen)
 
             cancelAndIgnoreRemainingItems()

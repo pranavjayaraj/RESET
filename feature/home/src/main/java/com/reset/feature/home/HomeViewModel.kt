@@ -8,7 +8,8 @@ import com.reset.model.domain.EyeFactProvider
 import com.reset.model.domain.ReminderAction
 import com.reset.model.domain.ReminderActionStore
 import com.reset.model.domain.model.ChimeKind
-import com.reset.navigation.AppDestination
+import com.reset.feature.home.api.HomeDestination
+import com.reset.feature.settings.api.SettingsDestination
 import com.reset.navigation.Navigator
 import com.reset.feature.home.navigation.HomeIntent
 import com.reset.feature.home.navigation.HomeSideEffect
@@ -116,7 +117,7 @@ class HomeViewModel @Inject constructor(
         }
         // The user may be on another destination (e.g. Settings); bring Home back on top
         // so the session is actually visible. No-op when Home is already showing.
-        navigator.popTo(AppDestination.Home)
+        navigator.popTo(HomeDestination)
         postSideEffect(HomeSideEffect.PlayChime(ChimeKind.Start))
         enterSession()
         reminderActionStore.consume(ReminderAction.StartReset)
@@ -167,7 +168,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun openSettings() = intent {
-        navigator.navigate(AppDestination.Settings)
+        navigator.navigate(SettingsDestination)
     }
 
     private fun onBackPress() = intent {

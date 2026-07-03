@@ -9,13 +9,12 @@
 
 ## 1. Architecture in one paragraph
 
-The app is a **single host Activity** (`MainActivity`, `@AndroidEntryPoint`) that owns the
-one `NavHost`. Each feature is a **stateless `XxxRoute` composable** placed into that graph —
+ Each feature is a **stateless `XxxRoute` composable** placed into that graph —
 **features are NOT Activities and never build a `NavController`**. UI state is driven by an
 **Orbit MVI ViewModel** (`BaseViewModel<State, SideEffect>`) using `intent { }`, `reduce { }`,
 and `postSideEffect(...)`. Cross-feature navigation and app-exit go through an injected
 **`Navigator` seam** (the leaf `:navigation` module): the ViewModel emits a
-`NavEvent`/`AppDestination`, and a single app-owned host (`ObserveNavigation`) applies it to
+`NavEvent`/`XxxDestination`, and a single app-owned host (`ObserveNavigation`) applies it to
 the real `NavController`. Intra-feature screen changes are **just state** (rendered from a
 `sealed` step in the state), not navigation. Dependencies are injected with **Hilt**; data
 flows through **UseCases/Repositories** returning `ApiResult.Success/Error`; reusable
@@ -31,6 +30,8 @@ Replace `Xxx` with the feature name. Create exactly this structure:
 
 ```
 feature/.../<feature>/
+  api/                     # SUBMODULE :feature:<feature>:api — the feature's navigation contract
+    XxxDestination.kt      # @Serializable destination(s) implementing Screen; args = ctor properties
   XxxState.kt              # @[Stable Keep] state + nested @Stable state + sealed statuses/steps
   XxxViewModel.kt          # Orbit MVI ViewModel: intent()/reduce()/postSideEffect() + injected Navigator
   XxxConstants.kt          # all event/page/action/status strings + dimens
@@ -46,15 +47,15 @@ navigation/                # shared LEAF module — pure Kotlin, KMP-ready, NO a
   Navigator.kt             # Navigator interface + NavEvent (Navigate/Pop/Exit)
   NavigatorImpl.kt         # @Singleton impl over a buffered Channel + Hilt @Binds module
   ObserveNavigation.kt     # the single host: collects events (repeatOnLifecycle) → NavController
-  Screen.kt                # Screen interface + AppDestination cross-feature catalog
+  Screen.kt                # Screen marker interface (destinations live in feature api modules)
 
 app/
   MainActivity.kt          # the ONE Activity: owns the NavHost, wires ObserveNavigation,
-                           #   registers each feature as composable(AppDestination.Xxx.route) { XxxRoute(...) }
+                           #   registers each feature as composable<XxxDestination> { XxxRoute(...) }
 ```
 
 > The `:navigation` module is a **leaf** every feature depends on for the pure-Kotlin seam
-> (`Navigator`, `NavEvent`, `AppDestination`). It declares `androidx.navigation` as
+> (`Navigator`, `NavEvent`, `Screen`). It declares `androidx.navigation` as
 > `implementation` (never `api`) so `NavController`/`NavHost` stay confined to `:navigation`
 > + `:app`; a feature can **not** import `androidx.navigation.*`. Only `:app` knows the graph.
 
@@ -82,9 +83,9 @@ app/
 - Owns the single `NavHost` and registers each feature route:
   ```kotlin
   ObserveNavigation(navigator = navigator, navController = navController, onExit = { finish() })
-  NavHost(navController, startDestination = AppDestination.Home.route) {
-      composable(AppDestination.Home.route) { HomeRoute(...) }
-      composable(AppDestination.Settings.route) { SettingsRoute() }
+  NavHost(navController, startDestination = HomeDestination) {
+      composable<HomeDestination> { HomeRoute(...) }
+      composable<SettingsDestination> { SettingsRoute() }
   }
   ```
 - This is the **single place** that knows the navigation graph and the `NavController`.
@@ -106,10 +107,11 @@ app/
       VoiceRecorderDelegate by voiceRecorderDelegateImpl,
       AudioMediaPlayerDelegate by audioMediaPlayerDelegateImpl {
   ```
-- Read navigation args (from the typed `AppDestination` / route, surfaced via
-  `SavedStateHandle`) with `argumentNullable(KEY)` — never from an Activity `Intent` extra:
+- Read navigation args (the constructor properties of the typed `@Serializable`
+  `XxxDestination`, surfaced via `SavedStateHandle` under their property names) with
+  `argumentNullable(KEY)` — never from an Activity `Intent` extra:
   ```kotlin
-  private val chatRoomId: String? by argumentNullable(CHATROOM_ID) // route arg key
+  private val chatRoomId: String? by argumentNullable(CHATROOM_ID) // = the property name on the destination
   ```
 - Override `initialState()` → `XxxState.getDefault()`, and do startup work in `initData()`
   (register delegate flow collectors, fetch details).
@@ -117,7 +119,7 @@ app/
   mutate state anywhere else.
 - **Toasts / chimes / other feature-local one-shot effects go through `postSideEffect(...)`.**
 - **Navigation is NOT a side effect.** Inject `Navigator` and call it from intent handlers:
-  `navigator.navigate(AppDestination.Xxx)`, `navigator.pop()`, `navigator.exit()`.
+  `navigator.navigate(XxxDestination)`, `navigator.pop()`, `navigator.exit()`.
 - Expose a single intent entry point with an exhaustive `when`:
   ```kotlin
   fun handleXxxIntent(intent: XxxIntent) = intent {
@@ -162,19 +164,23 @@ app/
   files — those are the retired pattern.
 - The feature layer depends **only** on the pure-Kotlin `:navigation` module. A feature must
   never touch `NavController`/`NavHost`.
-- Cross-feature destinations live in one shared sealed catalog, `AppDestination` (in
-  `Screen.kt`). Prefer **typed** destinations carrying their args over bare string routes:
+- Each feature owns its destinations in a tiny **`api` submodule** (`:feature:xxx:api`),
+  written in the Navigation 2.8 **type-safe routes DSL**: each destination is a
+  `@Serializable` type implementing the `Screen` marker from `:navigation`, and the type
+  itself is the route — no route strings, no shared catalog file. Args are constructor
+  properties, compile-time-checked. A feature that navigates to another depends only on
+  that feature's `api` module — **never** on its impl:
   ```kotlin
-  sealed interface AppDestination : Screen {
-      data object Settings : AppDestination { override val route = "settings" }
-      data class Detail(val id: String) : AppDestination { override val route = "detail/$id" }
-  }
+  // in :feature:settings:api
+  @Serializable data object SettingsDestination : Screen
+  // in :feature:detail:api — a destination with args
+  @Serializable data class DetailDestination(val id: String) : Screen
   ```
 - The ViewModel injects `Navigator` and navigates from intent handlers:
   ```kotlin
   private fun openSettings() = intent {
       reduce { state.copy(showReminderBanner = false) } // do work first if needed
-      navigator.navigate(AppDestination.Settings)        // then navigate
+      navigator.navigate(SettingsDestination)            // then navigate
   }
   ```
 - `NavigatorImpl` is `@Singleton` and carries **pure data only** through a buffered `Channel`
@@ -187,7 +193,7 @@ app/
 ### Launching Activities (leak-safe)
 - Even this single-Activity app must launch **external / system / third-party** Activities:
   URLs, share sheets, camera, document/photo pickers, sign-in, payments.
-- **Fire-and-forget:** emit a typed `AppDestination` (e.g. `ExternalUrl(url)`) or a
+- **Fire-and-forget:** emit a typed destination (e.g. `ExternalUrlDestination(url)`) or a
   `NavEvent.LaunchIntent(intent)`; the **host** builds the `Intent` with its own `Context` and
   calls `startActivity`. The `Context` is used transiently and never stored.
 - **Result-returning:** register `rememberLauncherForActivityResult(...)` inside the
@@ -224,12 +230,12 @@ app/
 1. `XxxState.kt` — root `@[Stable Keep]` state + nested `@Stable` states + sealed statuses + a sealed **step** for intra-feature screens, each with `getDefault()`.
 2. `navigation/XxxIntent.kt` — sealed interface of user intents.
 3. `navigation/XxxSideEffect.kt` — sealed class of **feature-local** one-shot effects only (navigation is NOT a side effect).
-4. Add the destination(s) to `AppDestination` in the `:navigation` module — **typed** if they carry args.
+4. Create `:feature:xxx:api` with the feature's `@Serializable XxxDestination : Screen` (args as constructor properties); other features depend on this api module to navigate here.
 5. `XxxViewModel.kt` — `BaseViewModel`, inject UseCases/Delegates **+ `Navigator`**, `handleXxxIntent`, `reduce`, `postSideEffect`, `navigator.navigate/pop/exit`, `handleError`.
 6. `ui/XxxRoute.kt` — `hiltViewModel()`, `collectAsStateWithLifecycle`, `LifecycleAwareLaunchedEffect(sideFlow())`, `BackHandler`; render screens from `state.screen`.
 7. `ui/` — stateless composables + `@StringDef` screen/tab markers.
 8. `XxxConstants.kt` — all strings/dimens.
-9. Register the route in `app/MainActivity` NavHost: `composable(AppDestination.Xxx.route) { XxxRoute(...) }`.
+9. Register the route in `app/MainActivity` NavHost: `composable<XxxDestination> { XxxRoute(...) }`.
 10. `utils/` — delegates (interface + `@Inject` impl) and pure util objects as needed.
 11. all kinds of api calls will be done in the data module
 12. all kinds of local data models will be created in the domain module
@@ -244,7 +250,8 @@ app/
 - ❌ No per-feature Activity, `NavHost`, `NavController`, `NavGraph`, or `NavigationAction` —
   features are `XxxRoute` composables in the app's single `NavHost`.
 - ❌ No `androidx.navigation.*` imports in a feature module — depend only on the `:navigation`
-  seam (`Navigator`, `NavEvent`, `AppDestination`).
+  seam (`Navigator`, `NavEvent`, `Screen`) and on other features' `api` modules for their
+  destinations. Never depend on another feature's impl module.
 - ❌ No navigation from the UI or via `postSideEffect(...)` — navigate through the injected
   `Navigator` (`navigate` / `pop` / `exit`) from ViewModel intent handlers.
 - ❌ No `Context`, Activity, `NavController`, launcher, or callback inside the `@Singleton`
