@@ -8,6 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.reset.feature.home.api.HomeDestination      
+import com.reset.feature.settings.api.SettingsDestination                                                          
 import androidx.navigation.compose.rememberNavController
 import com.reset.core.designsystem.AppBackground
 import com.reset.feature.home.ui.HomeRoute
@@ -15,7 +17,6 @@ import com.reset.feature.settings.ui.SettingsRoute
 import com.reset.model.domain.ReminderAction
 import com.reset.model.domain.ReminderActionStore
 import com.reset.model.domain.SoundController
-import com.reset.navigation.AppDestination
 import com.reset.repository.notification.NotificationConstants
 import com.reset.repository.notification.ReminderNotificationUtil
 import com.reset.navigation.Navigator
@@ -59,11 +60,11 @@ class MainActivity : ComponentActivity() {
                 AppBackground {
                     NavHost(
                         navController = navController,
-                        startDestination = AppDestination.Home,
+                        startDestination = HomeDestination,
                     ) {
-                        composable<AppDestination.Home> { HomeRoute(soundController) }
+                        composable<HomeDestination> { HomeRoute(soundController) }
 
-                        composable<AppDestination.Settings> { SettingsRoute() }
+                        composable<SettingsDestination> { SettingsRoute() }
                     }
                 }
             }
