@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="reminder_channel_name">Reset reminders</string>
+    <string name="reminder_channel_description">Gentle nudges to close your eyes and reset</string>
+    <string name="reminder_notification_title">Time to reset</string>
+    <string name="reminder_notification_text">You’ve been heads-down for a while. Close your eyes for a minute.</string>
+    <string name="reminder_action_later">Later</string>
+    <string name="reminder_action_reset">Reset</string>
+
+    <string name="reminder_streak_title">Don’t break your streak</string>
+    <plurals name="reminder_streak_text">
+        <item quantity="one">%1$d day of showing up — one more minute keeps it alive.</item>
+        <item quantity="other">%1$d days of showing up — one more minute keeps it alive.</item>
+    </plurals>
+
+    <string name="reminder_fact_title">Did you know?</string>
+    <!-- Indexed by EyeFact.index: size must stay equal to EyeFact.COUNT
+         (mirrors afk_eye_fact_texts in :feature:home). -->
+    <string-array name="reminder_eye_fact_texts">
+        <item>Close your eyes and the brain slips into alpha rhythm — the 8–12 Hz wave of calm, wakeful rest.</item>
+        <item>Nearly a third of your cortex is devoted to vision. Shut your eyes and you hand that capacity back.</item>
+        <item>Eyes closed, the default mode network takes over — where the mind wanders, reflects, and consolidates.</item>
+        <item>A brief eyes-closed pause lowers cortical arousal, slows the breath, and settles the heart rate.</item>
+        <item>Just 60 seconds with eyes shut measurably reduces visual fatigue and mental load.</item>
+    </string-array>
+</resources>

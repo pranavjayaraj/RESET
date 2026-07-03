@@ -9,5 +9,8 @@ sealed interface SettingsIntent {
     data class AdjustStartHour(val delta: Int) : SettingsIntent
     data class AdjustEndHour(val delta: Int) : SettingsIntent
 
+    /** Result of the POST_NOTIFICATIONS permission flow launched by the Route. */
+    data class UpdateNotificationPermission(val granted: Boolean) : SettingsIntent
+
     data object HandleBackPress : SettingsIntent
 }

@@ -29,6 +29,8 @@ fun ObserveNavigation(
                         launchSingleTop = true
                     }
                     NavEvent.Pop -> if (!navController.popBackStack()) onExit()
+                    is NavEvent.PopTo ->
+                        navController.popBackStack(event.screen.route, inclusive = false)
                     NavEvent.Exit -> onExit()
                 }
             }

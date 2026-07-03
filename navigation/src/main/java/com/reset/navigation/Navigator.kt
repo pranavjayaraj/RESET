@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.Flow
 sealed interface NavEvent {
     data class Navigate(val screen: Screen) : NavEvent
     data object Pop : NavEvent
+    /** Pop everything above [screen]; a no-op when it is already on top. */
+    data class PopTo(val screen: Screen) : NavEvent
     data object Exit : NavEvent
 }
 
@@ -19,5 +21,6 @@ interface Navigator {
 
     fun navigate(screen: Screen)
     fun pop()
+    fun popTo(screen: Screen)
     fun exit()
 }

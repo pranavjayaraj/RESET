@@ -28,6 +28,10 @@ class NavigatorImpl @Inject constructor() : Navigator {
         _events.trySend(NavEvent.Pop)
     }
 
+    override fun popTo(screen: Screen) {
+        _events.trySend(NavEvent.PopTo(screen))
+    }
+
     override fun exit() {
         _events.trySend(NavEvent.Exit)
     }

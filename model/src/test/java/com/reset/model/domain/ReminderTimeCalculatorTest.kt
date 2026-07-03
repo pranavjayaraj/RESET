@@ -1,0 +1,68 @@
+package com.reset.model.domain
+
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Test
+import java.util.Calendar
+import java.util.TimeZone
+
+class ReminderTimeCalculatorTest {
+
+    private val zone = TimeZone.getTimeZone("UTC")
+
+    private fun at(hour: Int, minute: Int = 0): Long =
+        Calendar.getInstance(zone).apply {
+            set(2026, Calendar.JULY, 1, hour, minute, 0)
+            set(Calendar.MILLISECOND, 0)
+        }.timeInMillis
+
+    @Test
+    fun `candidate inside the window fires exactly one cadence later`() {
+        val next = ReminderTimeCalculator.nextTriggerMillis(
+            nowMillis = at(10, 0), everyMin = 60, startHour = 9, endHour = 18, timeZone = zone,
+        )
+        assertEquals(at(11, 0), next)
+    }
+
+    @Test
+    fun `candidate before the window snaps to today's start hour`() {
+        val next = ReminderTimeCalculator.nextTriggerMillis(
+            nowMillis = at(7, 0), everyMin = 30, startHour = 9, endHour = 18, timeZone = zone,
+        )
+        assertEquals(at(9, 0), next)
+    }
+
+    @Test
+    fun `candidate past the window rolls over to tomorrow's start hour`() {
+        val next = ReminderTimeCalculator.nextTriggerMillis(
+            nowMillis = at(17, 45), everyMin = 30, startHour = 9, endHour = 18, timeZone = zone,
+        )
+        // 18:15 is at/after the 18:00 close → 09:00 the next day.
+        assertEquals(at(9, 0) + 24 * 60 * 60 * 1000L, next)
+    }
+
+    @Test
+    fun `candidate exactly at the end hour rolls over`() {
+        val next = ReminderTimeCalculator.nextTriggerMillis(
+            nowMillis = at(17, 0), everyMin = 60, startHour = 9, endHour = 18, timeZone = zone,
+        )
+        assertEquals(at(9, 0) + 24 * 60 * 60 * 1000L, next)
+    }
+
+    @Test
+    fun `midnight-to-midnight window never rolls a candidate forward`() {
+        val next = ReminderTimeCalculator.nextTriggerMillis(
+            nowMillis = at(23, 30), everyMin = 30, startHour = 0, endHour = 24, timeZone = zone,
+        )
+        assertEquals(at(23, 30) + 30 * 60 * 1000L, next)
+    }
+
+    @Test
+    fun `window membership is start-inclusive and end-exclusive`() {
+        assertTrue(ReminderTimeCalculator.isWithinWindow(at(9, 0), 9, 18, zone))
+        assertTrue(ReminderTimeCalculator.isWithinWindow(at(17, 59), 9, 18, zone))
+        assertFalse(ReminderTimeCalculator.isWithinWindow(at(18, 0), 9, 18, zone))
+        assertFalse(ReminderTimeCalculator.isWithinWindow(at(8, 59), 9, 18, zone))
+    }
+}

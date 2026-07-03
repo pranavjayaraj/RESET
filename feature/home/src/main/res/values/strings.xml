@@ -31,15 +31,6 @@
         <item quantity="other">%d sits</item>
     </plurals>
 
-    <!-- Reminder banner -->
-    <string name="afk_banner_app">afk</string>
-    <string name="afk_banner_now">now</string>
-    <string name="afk_banner_title">Time to reset</string>
-    <string name="afk_banner_body">You’ve been heads-down for a while. Close your eyes for a minute.</string>
-    <string name="afk_banner_later">Later</string>
-    <string name="afk_banner_reset">Reset</string>
-    <string name="afk_banner_icon_content_description">afk reminder</string>
-
     <!-- Loading / error -->
     <string name="afk_loading">Loading</string>
     <string name="afk_error_title">Something interrupted your calm.</string>

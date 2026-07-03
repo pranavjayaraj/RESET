@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -14,11 +16,19 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.ResetApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Notification-tap trampoline; add intent-filters here when external deeplinks arrive. -->
+        <activity
+            android:name=".DeeplinkHandlerActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.ResetApp" />
     </application>
 </manifest>

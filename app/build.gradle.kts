@@ -24,4 +24,6 @@ dependencies {
     // so it depends on navigation-compose directly rather than inheriting it from :navigation.
     implementation(libs.androidx.navigation.compose)
     implementation(libs.timber)
+    // App-scope coroutine launch of the startup ReminderScheduler sync.
+    implementation(libs.coroutines.android)
 }

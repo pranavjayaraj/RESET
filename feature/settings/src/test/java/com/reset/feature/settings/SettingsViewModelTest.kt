@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.reset.model.domain.model.HomePreferences
 import com.reset.navigation.NavEvent
 import com.reset.feature.settings.navigation.SettingsIntent
+import com.reset.feature.settings.navigation.SettingsSideEffect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -16,7 +17,8 @@ class SettingsViewModelTest {
     private fun viewModel(
         repository: FakeHomeRepository = FakeHomeRepository(),
         navigator: FakeNavigator = FakeNavigator(),
-    ) = SettingsViewModel(SavedStateHandle(), repository, navigator)
+        scheduler: FakeReminderScheduler = FakeReminderScheduler(),
+    ) = SettingsViewModel(SavedStateHandle(), repository, navigator, scheduler)
 
     @Test
     fun `loads persisted reminder preferences into state`() = runTest {
@@ -103,6 +105,60 @@ class SettingsViewModelTest {
             val updated = awaitUntil { it.endHour != HomePreferences.DEFAULT_REMINDER_END_HOUR }
             assertEquals(HomePreferences.DEFAULT_REMINDER_START_HOUR + 1, updated.endHour)
             assertEquals(HomePreferences.DEFAULT_REMINDER_START_HOUR + 1, repo.lastEndHour)
+
+            cancelAndIgnoreRemainingItems()
+        }
+    }
+
+    @Test
+    fun `enabling reminders re-arms the schedule and requests notification permission`() = runTest {
+        val repo = FakeHomeRepository(HomePreferences(remindersEnabled = false))
+        val scheduler = FakeReminderScheduler()
+
+        viewModel(repo, scheduler = scheduler).test(this) {
+            expectInitialState()
+            runOnCreate()
+            awaitUntil { it.loaded && !it.remindersEnabled }
+
+            containerHost.handleSettingsIntent(SettingsIntent.ToggleReminders)
+
+            awaitUntil { it.remindersEnabled }
+            assertEquals(SettingsSideEffect.RequestNotificationPermission, awaitSideEffect())
+            assertEquals(1, scheduler.preferencesChangedCount)
+
+            cancelAndIgnoreRemainingItems()
+        }
+    }
+
+    @Test
+    fun `changing the cadence re-arms the schedule`() = runTest {
+        val scheduler = FakeReminderScheduler()
+
+        viewModel(scheduler = scheduler).test(this) {
+            expectInitialState()
+            containerHost.handleSettingsIntent(SettingsIntent.SelectEveryMin(30))
+
+            awaitUntil { it.everyMin == 30 }
+            assertEquals(1, scheduler.preferencesChangedCount)
+
+            cancelAndIgnoreRemainingItems()
+        }
+    }
+
+    @Test
+    fun `only a granted notification permission ensures a schedule exists`() = runTest {
+        val scheduler = FakeReminderScheduler()
+
+        viewModel(scheduler = scheduler).test(this) {
+            expectInitialState()
+            containerHost.handleSettingsIntent(SettingsIntent.UpdateNotificationPermission(granted = false))
+            containerHost.handleSettingsIntent(SettingsIntent.UpdateNotificationPermission(granted = true))
+            // Intents run in order — awaiting this trailing state change proves both
+            // permission intents (which emit nothing) have completed.
+            containerHost.handleSettingsIntent(SettingsIntent.SelectEveryMin(30))
+
+            awaitUntil { it.everyMin == 30 }
+            assertEquals(1, scheduler.ensureScheduledCount)
 
             cancelAndIgnoreRemainingItems()
         }

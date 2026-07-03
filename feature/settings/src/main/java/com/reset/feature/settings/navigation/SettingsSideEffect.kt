@@ -1,8 +1,15 @@
 package com.reset.feature.settings.navigation
 
 /**
- * Settings has no one-shot effects — navigation (including closing) goes through the
- * injected [com.reset.navigation.Navigator]. Kept as an empty type to satisfy the
- * `BaseViewModel<State, SideEffect>` contract.
+ * Feature-local one-shot effects for Settings. Navigation (including closing) is NOT
+ * here — it goes through the injected [com.reset.navigation.Navigator].
  */
-sealed interface SettingsSideEffect
+sealed interface SettingsSideEffect {
+
+    /**
+     * Reminders were just enabled: the Route should run the POST_NOTIFICATIONS runtime
+     * permission flow (API 33+) and report back via
+     * [SettingsIntent.UpdateNotificationPermission].
+     */
+    data object RequestNotificationPermission : SettingsSideEffect
+}

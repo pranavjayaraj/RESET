@@ -7,9 +7,6 @@ import androidx.compose.ui.res.stringArrayResource
 /** All timing, animation, and string resource constants for the AFK feature live here. */
 object HomeConstants {
 
-    /** Delay before the "time for a break?" reminder banner slides in on Home. */
-    const val REMINDER_BANNER_DELAY_MS = 1_600L
-
     /** Duration of the bubble fling-away animation before advancing to the session. */
     const val LEAVE_ANIMATION_MS = 860L
 

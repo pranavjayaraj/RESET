@@ -7,7 +7,6 @@ sealed interface HomeIntent {
     data object TapReset : HomeIntent
     data object LeaveAnimationFinished : HomeIntent
     data object FinishSession : HomeIntent
-    data object DismissReminderBanner : HomeIntent
     data object OpenSettings : HomeIntent
     data object HandleBackPress : HomeIntent
     data object Retry : HomeIntent

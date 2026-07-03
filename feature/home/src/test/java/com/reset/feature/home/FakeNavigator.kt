@@ -13,6 +13,7 @@ class FakeNavigator : Navigator {
     override val events: Flow<NavEvent> = _events.receiveAsFlow()
 
     val navigated = mutableListOf<Screen>()
+    val poppedTo = mutableListOf<Screen>()
     var exited = false
         private set
     var popped = false
@@ -26,6 +27,11 @@ class FakeNavigator : Navigator {
     override fun pop() {
         popped = true
         _events.trySend(NavEvent.Pop)
+    }
+
+    override fun popTo(screen: Screen) {
+        poppedTo += screen
+        _events.trySend(NavEvent.PopTo(screen))
     }
 
     override fun exit() {

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Mirrors com.reset.core.designsystem.AppColors.accent; :repository cannot
+         depend on :core's Compose tokens, so the hex is duplicated here. -->
+    <color name="reminder_accent">#52A88F</color>
+</resources>

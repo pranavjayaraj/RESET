@@ -18,8 +18,9 @@ data class HomePreferences(
         const val DEFAULT_REMINDER_START_HOUR = 9
         const val DEFAULT_REMINDER_END_HOUR = 18
 
-        /** Reminder cadences offered by the Settings frequency grid, in minutes. */
-        val REMINDER_EVERY_OPTIONS = listOf(30, 60, 90, 120)
+        /** Reminder cadences offered by the Settings frequency grid, in minutes.
+         *  2 min is a temporary testing cadence — remove before release. */
+        val REMINDER_EVERY_OPTIONS = listOf(2, 30, 60, 90, 120)
 
         /** Earliest / latest hour a reminder window boundary may take (24h clock). */
         const val MIN_HOUR = 0

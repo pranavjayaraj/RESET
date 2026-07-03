@@ -2,6 +2,7 @@ package com.reset.feature.home
 
 import androidx.lifecycle.SavedStateHandle
 import com.reset.model.domain.EyeFactProvider
+import com.reset.model.domain.ReminderAction
 import com.reset.model.domain.model.HomePreferences
 import com.reset.model.domain.model.ChimeKind
 import com.reset.model.domain.model.EyeFact
@@ -25,7 +26,8 @@ class HomeViewModelTest {
         repository: FakeHomeRepository = FakeHomeRepository(),
         navigator: FakeNavigator = FakeNavigator(),
         random: Random = Random(SEED),
-    ) = HomeViewModel(SavedStateHandle(), repository, EyeFactProvider(random), navigator)
+        reminderActionStore: FakeReminderActionStore = FakeReminderActionStore(),
+    ) = HomeViewModel(SavedStateHandle(), repository, EyeFactProvider(random), navigator, reminderActionStore)
 
     @Test
     fun `load surfaces persisted prefs and stats as Content`() = runTest {
@@ -145,20 +147,52 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `reminder banner appears after delay and can be dismissed`() = runTest {
-        val repo = FakeHomeRepository(HomePreferences(remindersEnabled = true))
+    fun `reminder StartReset action enters the session directly with the persisted duration`() = runTest {
+        val repo = FakeHomeRepository(HomePreferences(durationMin = 3, remindersEnabled = true))
+        val store = FakeReminderActionStore()
+        // Dispatched before the ViewModel exists — the buffered store must hold it
+        // (cold start from the notification's Reset button).
+        store.dispatch(ReminderAction.StartReset)
 
-        viewModel(repo).test(this) {
+        viewModel(repo, reminderActionStore = store).test(this) {
             expectInitialState()
-            containerHost.handleHomeIntent(HomeIntent.Load)
+            // runOnCreate triggers initData(), which starts load() and the reminder
+            // action collector — a bare Load intent would leave the store uncollected.
+            runOnCreate()
+            awaitUntil { it.status is HomeStatus.Content }
+            assertEquals(HomeSideEffect.PlayChime(ChimeKind.Start), awaitSideEffect())
+
+            val session = awaitUntil { it.screen == HomeStep.Session }
+            assertFalse(session.leaving)
+            assertEquals(3 * 60, session.remainingSeconds)
+
+            cancelAndIgnoreRemainingItems()
+        }
+    }
+
+    @Test
+    fun `reminder StartReset action is ignored while a session is already running`() = runTest {
+        val repo = FakeHomeRepository(HomePreferences(durationMin = 5, remindersEnabled = false))
+        val store = FakeReminderActionStore()
+
+        viewModel(repo, reminderActionStore = store).test(this) {
+            expectInitialState()
+            // runOnCreate so the reminder action collector is live — otherwise the
+            // dispatch below is never observed and the test passes vacuously.
+            runOnCreate()
             awaitUntil { it.status is HomeStatus.Content }
 
-            val shown = awaitUntil { it.showReminderBanner }
-            assertTrue(shown.showReminderBanner)
+            containerHost.handleHomeIntent(HomeIntent.TapReset)
+            awaitUntil { it.leaving }
+            assertEquals(HomeSideEffect.PlayChime(ChimeKind.Start), awaitSideEffect())
+            containerHost.handleHomeIntent(HomeIntent.LeaveAnimationFinished)
+            val session = awaitUntil { it.screen == HomeStep.Session }
 
-            containerHost.handleHomeIntent(HomeIntent.DismissReminderBanner)
-            val dismissed = awaitUntil { !it.showReminderBanner }
-            assertFalse(dismissed.showReminderBanner)
+            store.dispatch(ReminderAction.StartReset)
+
+            // No restart: the countdown keeps its remaining time and no new chime plays.
+            assertEquals(5 * 60, session.remainingSeconds)
+            assertEquals(HomeStep.Session, containerHost.stateFlow().value.screen)
 
             cancelAndIgnoreRemainingItems()
         }
