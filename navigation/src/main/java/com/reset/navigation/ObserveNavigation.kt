@@ -25,12 +25,12 @@ fun ObserveNavigation(
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             navigator.events.collect { event ->
                 when (event) {
-                    is NavEvent.Navigate -> navController.navigate(event.screen.route) {
+                    is NavEvent.Navigate -> navController.navigate(event.screen) {
                         launchSingleTop = true
                     }
                     NavEvent.Pop -> if (!navController.popBackStack()) onExit()
                     is NavEvent.PopTo ->
-                        navController.popBackStack(event.screen.route, inclusive = false)
+                        navController.popBackStack(event.screen, inclusive = false)
                     NavEvent.Exit -> onExit()
                 }
             }

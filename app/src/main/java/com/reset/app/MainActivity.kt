@@ -59,12 +59,11 @@ class MainActivity : ComponentActivity() {
                 AppBackground {
                     NavHost(
                         navController = navController,
-                        startDestination = AppDestination.Home.route,
+                        startDestination = AppDestination.Home,
                     ) {
-                        
-                        composable(AppDestination.Home.route) { HomeRoute(soundController) }
-                        
-                        composable(AppDestination.Settings.route) { SettingsRoute() }
+                        composable<AppDestination.Home> { HomeRoute(soundController) }
+
+                        composable<AppDestination.Settings> { SettingsRoute() }
                     }
                 }
             }

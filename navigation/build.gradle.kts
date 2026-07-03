@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.reset.androidLibraryCompose)
     alias(libs.plugins.reset.hilt)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -16,4 +17,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.coroutines.core)
+    // `api` on purpose: AppDestination classes are @Serializable, so their compiled signatures
+    // reference kotlinx-serialization types. The runtime is pure Kotlin (KMP-safe), unlike the
+    // androidx dependencies above which stay `implementation`.
+    api(libs.kotlinx.serialization.core)
 }
