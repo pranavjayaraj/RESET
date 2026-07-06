@@ -58,6 +58,55 @@ fun BackIcon(modifier: Modifier = Modifier, tint: Color = AppColors.textPrimary)
 }
 
 @Composable
+fun HomeIcon(modifier: Modifier = Modifier, tint: Color = AppColors.textPrimary) {
+    Canvas(modifier) {
+        val unit = size.minDimension / GRID
+        fun p(x: Float, y: Float) = Offset(x * unit, y * unit)
+        val stroke = Stroke(1.8f * unit, cap = StrokeCap.Round, join = StrokeJoin.Round)
+        val roof = Path().apply {
+            moveTo(p(4f, 11.5f).x, p(4f, 11.5f).y)
+            lineTo(p(12f, 4.5f).x, p(12f, 4.5f).y)
+            lineTo(p(20f, 11.5f).x, p(20f, 11.5f).y)
+        }
+        drawPath(roof, tint, style = stroke)
+        val walls = Path().apply {
+            moveTo(p(6.5f, 10.5f).x, p(6.5f, 10.5f).y)
+            lineTo(p(6.5f, 19.5f).x, p(6.5f, 19.5f).y)
+            lineTo(p(17.5f, 19.5f).x, p(17.5f, 19.5f).y)
+            lineTo(p(17.5f, 10.5f).x, p(17.5f, 10.5f).y)
+        }
+        drawPath(walls, tint, style = stroke)
+    }
+}
+
+/** Concentric ripple rings — the sit-history / sessions marker. */
+@Composable
+fun RippleIcon(modifier: Modifier = Modifier, tint: Color = AppColors.textPrimary) {
+    Canvas(modifier) {
+        val unit = size.minDimension / GRID
+        val stroke = Stroke(1.8f * unit, cap = StrokeCap.Round)
+        drawCircle(tint, radius = 2.6f * unit, center = center, style = stroke)
+        drawCircle(tint.copy(alpha = tint.alpha * 0.7f), radius = 6f * unit, center = center, style = stroke)
+        drawCircle(tint.copy(alpha = tint.alpha * 0.4f), radius = 9.4f * unit, center = center, style = stroke)
+    }
+}
+
+@Composable
+fun ProfileIcon(modifier: Modifier = Modifier, tint: Color = AppColors.textPrimary) {
+    Canvas(modifier) {
+        val unit = size.minDimension / GRID
+        fun p(x: Float, y: Float) = Offset(x * unit, y * unit)
+        val stroke = Stroke(1.8f * unit, cap = StrokeCap.Round)
+        drawCircle(tint, radius = 3.4f * unit, center = p(12f, 8f), style = stroke)
+        val shoulders = Path().apply {
+            moveTo(p(5f, 19.5f).x, p(5f, 19.5f).y)
+            quadraticTo(p(12f, 13f).x, p(12f, 13f).y, p(19f, 19.5f).x, p(19f, 19.5f).y)
+        }
+        drawPath(shoulders, tint, style = stroke)
+    }
+}
+
+@Composable
 fun ClosedEyeIcon(modifier: Modifier = Modifier, tint: Color = AppColors.textPrimary) {
     Canvas(modifier) {
         val unit = size.minDimension / GRID

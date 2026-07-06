@@ -13,6 +13,7 @@ class FakeNavigator : Navigator {
     override val events: Flow<NavEvent> = _events.receiveAsFlow()
 
     val navigated = mutableListOf<Screen>()
+    val switchedTabs = mutableListOf<Screen>()
     val poppedTo = mutableListOf<Screen>()
     var exited = false
         private set
@@ -22,6 +23,11 @@ class FakeNavigator : Navigator {
     override fun navigate(screen: Screen) {
         navigated += screen
         _events.trySend(NavEvent.Navigate(screen))
+    }
+
+    override fun switchTab(screen: Screen) {
+        switchedTabs += screen
+        _events.trySend(NavEvent.SwitchTab(screen))
     }
 
     override fun pop() {

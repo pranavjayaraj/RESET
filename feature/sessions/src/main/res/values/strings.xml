@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sessions_title">SESSIONS</string>
+    <string name="sessions_section_history">Your sit history</string>
+
+    <string name="sessions_stat_sits">sits</string>
+    <string name="sessions_stat_time">time resting</string>
+    <string name="sessions_stat_streak">day streak</string>
+
+    <string name="sessions_empty_title">No sits yet</string>
+    <string name="sessions_empty_body">Your first reset will show up here. Head to Home and take a moment.</string>
+
+    <string name="sessions_error_title">Couldn\'t load your sessions</string>
+    <string name="sessions_retry">Try again</string>
+</resources>

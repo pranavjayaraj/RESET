@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">RESET APP</string>
+
+    <!-- Dashboard bottom-bar tab labels -->
+    <string name="tab_home">Home</string>
+    <string name="tab_sessions">Sessions</string>
+    <string name="tab_profile">Profile</string>
 </resources>
