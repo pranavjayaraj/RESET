@@ -24,6 +24,10 @@ class NavigatorImpl @Inject constructor() : Navigator {
         _events.trySend(NavEvent.Navigate(screen))
     }
 
+    override fun switchTab(screen: Screen) {
+        _events.trySend(NavEvent.SwitchTab(screen))
+    }
+
     override fun pop() {
         _events.trySend(NavEvent.Pop)
     }

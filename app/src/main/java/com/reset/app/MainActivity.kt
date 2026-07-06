@@ -9,11 +9,17 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.reset.feature.home.api.HomeDestination      
-import com.reset.feature.settings.api.SettingsDestination                                                          
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
+import com.reset.feature.home.api.HomeDestination
+import com.reset.feature.sessions.api.SessionsDestination
+import com.reset.feature.settings.api.SettingsDestination
 import androidx.navigation.compose.rememberNavController
+import com.reset.app.ui.ResetBottomBar
 import com.reset.core.designsystem.AppBackground
 import com.reset.feature.home.ui.HomeRoute
+import com.reset.feature.sessions.ui.SessionsRoute
 import com.reset.feature.settings.ui.SettingsRoute
 import com.reset.model.domain.ReminderAction
 import com.reset.model.domain.ReminderActionStore
@@ -67,13 +73,25 @@ class MainActivity : ComponentActivity() {
                     onExit = { finish() },
                 )
                 AppBackground {
-                    NavHost(
-                        navController = navController,
-                        startDestination = HomeDestination,
-                    ) {
-                        composable<HomeDestination> { HomeRoute(soundController) }
+                    Column(Modifier.fillMaxSize()) {
+                        NavHost(
+                            navController = navController,
+                            startDestination = HomeDestination,
+                            modifier = Modifier.weight(1f),
+                        ) {
+                            composable<HomeDestination> { HomeRoute(soundController) }
 
-                        composable<SettingsDestination> { SettingsRoute() }
+                            composable<SessionsDestination> { SessionsRoute() }
+
+                            composable<SettingsDestination> { SettingsRoute() }
+                        }
+
+                        // The vibely-style dashboard bar. Taps enter the Navigator seam as
+                        // SwitchTab events; ObserveNavigation applies the tab semantics.
+                        ResetBottomBar(
+                            navController = navController,
+                            onSelectTab = navigator::switchTab,
+                        )
                     }
                 }
             }

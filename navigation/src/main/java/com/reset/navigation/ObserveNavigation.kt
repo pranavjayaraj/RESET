@@ -6,6 +6,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 
 /**
  * Hosts navigation for the app: collects [Navigator.events] while the host is at least
@@ -27,6 +28,15 @@ fun ObserveNavigation(
                 when (event) {
                     is NavEvent.Navigate -> navController.navigate(event.screen) {
                         launchSingleTop = true
+                    }
+                    is NavEvent.SwitchTab -> navController.navigate(event.screen) {
+                        // Canonical bottom-bar behaviour: one tab deep at a time, state
+                        // preserved per tab, back always lands on the start destination.
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
                     }
                     NavEvent.Pop -> if (!navController.popBackStack()) onExit()
                     is NavEvent.PopTo ->

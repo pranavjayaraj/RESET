@@ -18,6 +18,8 @@ dependencies {
     implementation(project(":navigation"))
     implementation(project(":feature:home"))
     implementation(project(":feature:home:api"))
+    implementation(project(":feature:sessions"))
+    implementation(project(":feature:sessions:api"))
     implementation(project(":feature:settings"))
     implementation(project(":feature:settings:api"))
     implementation(project(":model"))

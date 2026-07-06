@@ -1,4 +1,4 @@
-package com.reset.feature.settings
+package com.reset.feature.sessions
 
 import com.reset.navigation.NavEvent
 import com.reset.navigation.Navigator
